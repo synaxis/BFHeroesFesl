@@ -4,9 +4,9 @@ import (
 	"database/sql"
 	"time"
 
-	"github.com/Synaxis/bfheroesFesl/inter/matchmaking"
-	"github.com/Synaxis/bfheroesFesl/inter/network"
-	"github.com/Synaxis/bfheroesFesl/storage/level"
+	"github.com/Synaxis/unstable/backend/inter/matchmaking"
+	"github.com/Synaxis/unstable/backend/inter/network"
+	"github.com/Synaxis/unstable/backend/storage/level"
 
 	"github.com/sirupsen/logrus"
 )
@@ -120,9 +120,9 @@ func (tm *Theater) Listen() {
 			case "client.close":
 				tm.close(event.Data.(network.EventClientClose))
 			case "client.command":
-				logrus.WithFields(logrus.Fields{"srv": tm.name, "cmd": event.Name}).Debugf("Event")
+				logrus.WithFields(logrus.Fields{"srv": tm.name, "cmd": event.Name}).Debugf("Got event")
 			default:
-				logrus.WithFields(logrus.Fields{"srv": tm.name, "cmd": event.Name}).Debugf("Event")
+				logrus.WithFields(logrus.Fields{"srv": tm.name, "cmd": event.Name}).Debugf("Got event")
 			}
 		}
 	}

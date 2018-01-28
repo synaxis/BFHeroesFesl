@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/Synaxis/bfheroesFesl/config"
-	"github.com/Synaxis/bfheroesFesl/inter/network"
-	"github.com/Synaxis/bfheroesFesl/inter/network/codec"
+	"github.com/Synaxis/unstable/backend/config"
+	"github.com/Synaxis/unstable/backend/inter/network"
+	"github.com/Synaxis/unstable/backend/inter/network/codec"
 
 	"github.com/sirupsen/logrus"
 )

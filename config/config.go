@@ -15,7 +15,7 @@ var (
 )
 
 type cfg struct {
-	LogLevel string `envconfig:"LOG_LEVEL" default:"DEBUG"`
+	LogLevel string `envconfig:"LOG_LEVEL" default:"INFO"`
 
 	HTTPBind  string `envconfig:"HTTP_BIND" default:"0.0.0.0:8080"`
 	HTTPSBind string `envconfig:"HTTPS_BIND" default:"0.0.0.0:443"`
@@ -26,8 +26,9 @@ type cfg struct {
 	ThtrClientPort int    `envconfig:"THEATER_CLIENT_PORT" default:"18275"`
 	ThtrServerPort int    `envconfig:"THEATER_SERVER_PORT" default:"18056"`
 
+	// An address for clients where theater can be found.
 	// Preferable: domain name without protocol scheme and port
-	ThtrAddr string `envconfig:"THEATER_ADDR" default:"127.0.0.1"`
+	ThtrAddr string `envconfig:"THEATER_ADDR" default:"localhost"`
 
 	TelemetricsIP   string `envconfig:"TELEMETRICS_IP" default:"127.0.0.1"`
 	TelemetricsPort int    `envconfig:"TELEMETRICS_PORT" default:"13505"`
@@ -37,15 +38,15 @@ type cfg struct {
 
 type MySQL struct {
 	UserName string `envconfig:"DATABASE_USERNAME" default:"root"`
-	Password string `envconfig:"DATABASE_PASSWORD"`
+	Password string `envconfig:"DATABASE_PASSWORD"` 
 	Host     string `envconfig:"DATABASE_HOST" default:"127.0.0.1"`
 	Port     int    `envconfig:"DATABASE_PORT" default:"3306"`
 	Name     string `envconfig:"DATABASE_NAME" default:"naomi"`
 }
 
 type Fixtures struct {
-	Path       string `envconfig:"CERT_PATH" default:"_cert/cert.pem"`
-	PrivateKey string `envconfig:"PRIVATE_KEY_PATH" default:"_cert/key.pem"`
+	Path       string `envconfig:"CERT_PATH" default:"_fixtures/cert.pem"`
+	PrivateKey string `envconfig:"PRIVATE_KEY_PATH" default:"_fixtures/key.pem"`
 }
 
 func Initialize() {

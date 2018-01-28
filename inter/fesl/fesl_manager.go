@@ -6,9 +6,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Synaxis/bfheroesFesl/config"
-	"github.com/Synaxis/bfheroesFesl/inter/network"
-	"github.com/Synaxis/bfheroesFesl/storage/level"
+	"github.com/Synaxis/unstable/backend/config"
+	"github.com/Synaxis/unstable/backend/inter/network"
+	"github.com/Synaxis/unstable/backend/storage/level"
 
 	"github.com/sirupsen/logrus"
 )
@@ -88,9 +88,9 @@ func (fm *FeslManager) run() {
 				logrus.WithFields(logrus.Fields{
 					"srv": fm.name,
 					"cmd": fmt.Sprintf("%s/TXN:%s", event.Name, txn),
-				}).Debugf("Event")
+				}).Debugf("Got event")
 			default:
-				logrus.WithFields(logrus.Fields{"srv": fm.name, "event": event.Name}).Debugf("Event")
+				logrus.WithFields(logrus.Fields{"srv": fm.name, "event": event.Name}).Debugf("Got event")
 			}
 		}
 	}

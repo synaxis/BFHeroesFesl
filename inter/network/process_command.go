@@ -7,7 +7,7 @@ import (
 	"net"
 	"strings"
 
-	"github.com/Synaxis/bfheroesFesl/inter/network/codec"
+	"github.com/Synaxis/unstable/backend/inter/network/codec"
 
 	"github.com/sirupsen/logrus"
 )
