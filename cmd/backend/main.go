@@ -4,12 +4,12 @@ import (
 	"database/sql"
 	"flag"
 
-	"github.com/Synaxis/unstable/backend/config"
-	"github.com/Synaxis/unstable/backend/inter/fesl"
-	"github.com/Synaxis/unstable/backend/inter/theater"
-	"github.com/Synaxis/unstable/backend/server"
-	"github.com/Synaxis/unstable/backend/storage/database"
-	"github.com/Synaxis/unstable/backend/storage/level"
+	"./openheroes/backend/config"
+	"./openheroes/backend/internal/fesl"
+	"./openheroes/backend/internal/theater"
+	"./openheroes/backend/server"
+	"./openheroes/backend/storage/database"
+	"./openheroes/backend/storage/level"
 
 	"github.com/sirupsen/logrus"
 	"github.com/subosito/gotenv"
@@ -28,7 +28,7 @@ func main() {
 
 	startServer(mdb, ldb)
 
-	logrus.Println("Serving..")
+	logrus.Println("Serving...")
 
 	// Use "github.com/google/gops/agent" to analyze resources
 	// if err := agent.Listen(&agent.Options{}); err != nil {

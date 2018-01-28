@@ -28,9 +28,9 @@ type cfg struct {
 
 	// An address for clients where theater can be found.
 	// Preferable: domain name without protocol scheme and port
-	ThtrAddr string `envconfig:"THEATER_ADDR" default:"localhost"`
+	ThtrAddr string `envconfig:"THEATER_ADDR" default:"189.62.63.82"`
 
-	TelemetricsIP   string `envconfig:"TELEMETRICS_IP" default:"127.0.0.1"`
+	TelemetricsIP   string `envconfig:"TELEMETRICS_IP" default:"189.62.63.82"`
 	TelemetricsPort int    `envconfig:"TELEMETRICS_PORT" default:"13505"`
 
 	LevelDBPath string `envconfig:"LEVEL_DB_PATH" default:"_data/lvl.db"`
@@ -38,10 +38,10 @@ type cfg struct {
 
 type MySQL struct {
 	UserName string `envconfig:"DATABASE_USERNAME" default:"root"`
-	Password string `envconfig:"DATABASE_PASSWORD"` 
+	Password string `envconfig:"DATABASE_PASSWORD"`
 	Host     string `envconfig:"DATABASE_HOST" default:"127.0.0.1"`
 	Port     int    `envconfig:"DATABASE_PORT" default:"3306"`
-	Name     string `envconfig:"DATABASE_NAME" default:"naomi"`
+	Name     string `envconfig:"DATABASE_NAME" default:"lastwave"`
 }
 
 type Fixtures struct {
