@@ -24,7 +24,7 @@ func newSocket(name, bind string, fesl bool) *Socket {
 		name:      name,
 		bind:      bind,
 		fesl:      fesl,
-		Clients:   newClients(),
+		Clients:   newClient(),
 		EventChan: make(chan SocketEvent, 1000),
 	}
 }
@@ -109,9 +109,14 @@ func (socket *Socket) handleClientEvents(client *Client) {
 			case strings.Index(event.Name, "command") != -1:
 				socket.EventChan <- client.FireClientCommand(event)
 			case event.Name == "data":
-				socket.EventChan <- client.FireClientData(event)
+				logrus.Errorf("Not implemented: Client send client.data: %s", event.Data)
 			default:
-				socket.EventChan <- client.FireSomething(event)
+				// Fire something
+				logrus.Warn("Not implemented client.%s for %s", event.Name, event.Data)
+				// socket.EventChan <- SocketEvent{
+				// 	Name: "client." + event.Name,
+				// 	Data: []interface{}{client, event.Data},
+				// }
 			}
 		}
 	}
@@ -133,7 +138,7 @@ func (socket *Socket) run(connect connAcceptFunc) {
 		conn, err := socket.listen.Accept()
 		if err != nil {
 			logrus.Errorf("%s: A new client connecting threw an error.\n%v", socket.name, err)
-			socket.EventChan <- socket.FireError(err)
+			socket.EventChan <- socket.FireClose()
 			continue
 		}
 
@@ -161,7 +166,7 @@ func (socket *Socket) createClientTLS(conn net.Conn) {
 	err := tlscon.Handshake()
 	if err != nil {
 		logrus.Errorf("%s: A new client connecting threw an error.\n%v\n%v", socket.name, err, tlscon.RemoteAddr())
-		socket.EventChan <- socket.FireError(err)
+		socket.EventChan <- socket.FireClose()
 		tlscon.Close()
 	}
 

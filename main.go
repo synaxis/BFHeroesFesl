@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"database/sql"
 	"flag"
 
@@ -26,11 +27,14 @@ func main() {
 	mdb, _ := newMySQL()
 	ldb, _ := newLevelDB()
 
-	startServer(mdb, ldb)
+	ctx, cancel := context.WithCancel(context.Background())
+	defer func() {
+		cancel()
+	}()
+	startServer(ctx, ldb)
 
-	logrus.Println("Serving..")
-	a := make(chan bool)
-	<-a
+	logrus.Println("Serving...")
+	<-ctx.Done()
 }
 
 func initConfig() {

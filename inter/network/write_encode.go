@@ -7,7 +7,6 @@ import (
 	"net"
 
 	"github.com/Synaxis/bfheroesFesl/inter/network/codec"
-
 	"github.com/sirupsen/logrus"
 )
 
@@ -18,7 +17,7 @@ func (client *Client) WriteEncode(packet *codec.Packet) error {
 	}
 
 	return writeEncode(packet, func(buf *bytes.Buffer) error {
-		_, err := io.Copy(client.conn, buf)
+		_, err := io.Copy(client.Conn, buf)
 		return err
 	})
 }
