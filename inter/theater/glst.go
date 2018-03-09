@@ -1,7 +1,7 @@
 package theater
 
 import (
-	"github.com/Synaxis/bfheroesFesl/inter/network"
+	"bitbucket.org/openheroes/backend/internal/network"
 
 	"github.com/sirupsen/logrus"
 )

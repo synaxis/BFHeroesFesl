@@ -7,22 +7,22 @@ import (
 	"net"
 	"strings"
 
-	"github.com/Synaxis/bfheroesFesl/inter/network/codec"
+	"bitbucket.org/openheroes/backend/internal/network/codec"
 
 	"github.com/sirupsen/logrus"
 )
 
 type eventReadFesl func(outCommand *CommandFESL, payloadType string)
 
-func (client *Client) readFESL(data []byte) {
-	readFesl(data, func(cmd *CommandFESL, payloadType string) {
+func (client *Client) readFESL(data []byte) []byte {
+	return readFesl(data, func(cmd *CommandFESL, payloadType string) {
 		client.eventChan <- ClientEvent{Name: "command." + payloadType, Data: cmd}
 		client.eventChan <- ClientEvent{Name: "command", Data: cmd}
 	})
 }
 
-func (client *Client) readTLSPacket(data []byte) {
-	readFesl(data, func(cmd *CommandFESL, payloadType string) {
+func (client *Client) readFESLTLS(data []byte) []byte {
+	return readFesl(data, func(cmd *CommandFESL, payloadType string) {
 		client.eventChan <- ClientEvent{Name: "command." + cmd.Message["TXN"], Data: cmd}
 		client.eventChan <- ClientEvent{Name: "command", Data: cmd}
 	})
@@ -52,44 +52,55 @@ func (socket *SocketUDP) readFESL(data []byte, addr *net.UDPAddr) {
 	socket.EventChan <- SocketUDPEvent{Name: "command", Addr: addr, Data: out}
 }
 
-func readFesl(data []byte, fireEvent eventReadFesl) {
-	var (
-		err            error
-		payloadID      uint32
-		payloadLen     uint32
-		payloadTypeRaw = make([]byte, 4)
-	)
+func readFesl(data []byte, fireEvent eventReadFesl) []byte {
+	p := bytes.NewBuffer(data)
+	i := 0
+	var payloadRaw []byte
+	for {
+		// Create a copy at this point in case we have to abort later
+		// And send back the packet to get the rest
+		curData := p
 
-	payload := bytes.NewBuffer(data)
+		var payloadID uint32
+		var payloadLen uint32
 
-	if _, err = payload.Read(payloadTypeRaw); err != nil {
-		return
+		payloadTypeRaw := make([]byte, 4)
+		_, err := p.Read(payloadTypeRaw)
+		if err != nil {
+			return nil
+		}
+
+		payloadType := string(payloadTypeRaw)
+
+		binary.Read(p, binary.BigEndian, &payloadID)
+
+		if p.Len() < 4 {
+			return nil
+		}
+
+		binary.Read(p, binary.BigEndian, &payloadLen)
+
+		if (payloadLen - 12) > uint32(len(p.Bytes())) {
+			logrus.Println("Packet not fully read")
+			return curData.Bytes()
+		}
+
+		payloadRaw = make([]byte, (payloadLen - 12))
+		p.Read(payloadRaw)
+
+		payload := codec.DecodeFESL(payloadRaw)
+
+		out := &CommandFESL{
+			Query:     payloadType,
+			PayloadID: payloadID,
+			Message:   payload,
+		}
+		fireEvent(out, payloadType)
+
+		i++
 	}
 
-	if err = binary.Read(payload, binary.BigEndian, &payloadID); err != nil {
-		return
-	}
-
-	if err = binary.Read(payload, binary.BigEndian, &payloadLen); err != nil {
-		return
-	}
-
-	if (payloadLen - 12) > uint32(len(payload.Bytes())) {
-		logrus.Errorf("Packet not fully read, payload: %s", payload.Bytes())
-	}
-
-	msg := codec.DecodeFESL(payload.Bytes())
-
-	out := &CommandFESL{
-		Query:     string(payloadTypeRaw),
-		PayloadID: payloadID,
-		Message:   msg,
-	}
-
-	// logrus.
-	// 	WithField("type", "request").
-	// 	Debugf("%s", payloadRaw)
-	fireEvent(out, string(payloadTypeRaw))
+	return nil
 }
 
 type CommandFESL struct {
@@ -134,7 +145,7 @@ func (client *Client) processCommand(command string) {
 	gsPacket, err := processCommand(command)
 	if err != nil {
 		logrus.Errorf("%s: Error processing command %s.\n%v", client.name, command, err)
-		//client.eventChan <- client.FireError(err)
+		client.eventChan <- client.FireError(err)
 		return
 	}
 

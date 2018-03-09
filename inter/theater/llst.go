@@ -1,8 +1,8 @@
 package theater
 
 import (
-	"github.com/Synaxis/bfheroesFesl/inter/network"
-	"github.com/Synaxis/bfheroesFesl/inter/network/codec"
+	"bitbucket.org/openheroes/backend/internal/network"
+	"bitbucket.org/openheroes/backend/internal/network/codec"
 )
 
 // Lobbies List
@@ -41,7 +41,7 @@ func (tm *Theater) LLST(event network.EventClientCommand) {
 			Locale:          "en_US",
 			MaxGames:        "10000",
 			Name:            "bfwestPC02",
-			NumGames:        "2",
+			NumGames:        "1",
 			Passing:         "0",
 		},
 	})

@@ -24,7 +24,7 @@ func newSocket(name, bind string, fesl bool) *Socket {
 		name:      name,
 		bind:      bind,
 		fesl:      fesl,
-		Clients:   newClient(),
+		Clients:   newClients(),
 		EventChan: make(chan SocketEvent, 1000),
 	}
 }
@@ -109,14 +109,9 @@ func (socket *Socket) handleClientEvents(client *Client) {
 			case strings.Index(event.Name, "command") != -1:
 				socket.EventChan <- client.FireClientCommand(event)
 			case event.Name == "data":
-				logrus.Errorf("Not implemented: Client send client.data: %s", event.Data)
+				socket.EventChan <- client.FireClientData(event)
 			default:
-				// Fire something
-				logrus.Warn("Not implemented client.%s for %s", event.Name, event.Data)
-				// socket.EventChan <- SocketEvent{
-				// 	Name: "client." + event.Name,
-				// 	Data: []interface{}{client, event.Data},
-				// }
+				socket.EventChan <- client.FireSomething(event)
 			}
 		}
 	}
@@ -138,7 +133,7 @@ func (socket *Socket) run(connect connAcceptFunc) {
 		conn, err := socket.listen.Accept()
 		if err != nil {
 			logrus.Errorf("%s: A new client connecting threw an error.\n%v", socket.name, err)
-			socket.EventChan <- socket.FireClose()
+			socket.EventChan <- socket.FireError(err)
 			continue
 		}
 
@@ -162,16 +157,16 @@ func (socket *Socket) createClientTLS(conn net.Conn) {
 		return
 	}
 
-	tlscon.SetDeadline(time.Now().Add(time.Second * 12))
+	tlscon.SetDeadline(time.Now().Add(time.Second * 10))
 	err := tlscon.Handshake()
 	if err != nil {
 		logrus.Errorf("%s: A new client connecting threw an error.\n%v\n%v", socket.name, err, tlscon.RemoteAddr())
-		socket.EventChan <- socket.FireClose()
+		socket.EventChan <- socket.FireError(err)
 		tlscon.Close()
 	}
 
 	state := tlscon.ConnectionState()
-	logrus.Debugf("Conn handshake complete %t, %v", state.HandshakeComplete, state)
+	logrus.Debugf("Connection handshake complete %t, %v", state.HandshakeComplete, state)
 
 	// reset deadline after handshake
 	tlscon.SetDeadline(time.Time{})
@@ -235,7 +230,7 @@ func NewSocketUDP(name, bind string, fesl bool) (*SocketUDP, error) {
 }
 
 func (socket *SocketUDP) run() {
-	buf := make([]byte, 8096)
+	buf := make([]byte, 4096)
 
 	for {
 		n, addr, err := socket.listen.ReadFromUDP(buf)

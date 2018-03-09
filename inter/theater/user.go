@@ -3,9 +3,9 @@ package theater
 import (
 	"fmt"
 
-	"github.com/Synaxis/bfheroesFesl/inter/network"
-	"github.com/Synaxis/bfheroesFesl/inter/network/codec"
-	"github.com/Synaxis/bfheroesFesl/storage/level"
+	"bitbucket.org/openheroes/backend/internal/network"
+	"bitbucket.org/openheroes/backend/internal/network/codec"
+	"bitbucket.org/openheroes/backend/storage/level"
 
 	"github.com/sirupsen/logrus"
 )
@@ -21,29 +21,29 @@ func (tm *Theater) NewState(ident string) *level.State {
 }
 
 // USER - SHARED Called to get user data about client? No idea
-func (tm *Theater) USER(event network.ClientCommand) {
+func (tm *Theater) USER(event network.EventClientCommand) {
 	if !event.Client.IsActive {
 		logrus.Println("Client left")
 		return
 	}
 
-	lkeyRedis := tm.level.NewObject("lkeys", Command.Message["LKEY"])
+	lkeyRedis := tm.level.NewObject("lkeys", event.Command.Message["LKEY"])
 
 	redisState := tm.NewState(fmt.Sprintf(
 		"%s:%s",
 		"mm",
-		Command.Message["LKEY"],
+		event.Command.Message["LKEY"],
 	))
-	Client.HashState = redisState
+	event.Client.HashState = redisState
 
 	redisState.Set("id", lkeyRedis.Get("id"))
 	redisState.Set("userID", lkeyRedis.Get("userID"))
 	redisState.Set("name", lkeyRedis.Get("name"))
 
-	Client.WriteEncode(&codec.Packet{
+	event.Client.WriteEncode(&codec.Packet{
 		Type: thtrUSER,
 		Payload: answerUSER{
-			TheaterID: Command.Message["TID"],
+			TheaterID: event.Command.Message["TID"],
 			Name:      lkeyRedis.Get("name"),
 		},
 	})

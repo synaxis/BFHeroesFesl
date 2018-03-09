@@ -4,9 +4,9 @@ import (
 	"database/sql"
 	"time"
 
-	"github.com/Synaxis/bfheroesFesl/inter/matchmaking"
-	"github.com/Synaxis/bfheroesFesl/inter/network"
-	"github.com/Synaxis/bfheroesFesl/storage/level"
+	"bitbucket.org/openheroes/backend/internal/matchmaking"
+	"bitbucket.org/openheroes/backend/internal/network"
+	"bitbucket.org/openheroes/backend/storage/level"
 
 	"github.com/sirupsen/logrus"
 )
@@ -81,9 +81,9 @@ func (tm *Theater) Listen() {
 			case "command.ECHO":
 				go tm.ECHO(event)
 			case "command":
-				logrus.Debugf("UDP event %s: %v", event.Name, event.Data.(*network.CommandFESL))
+				logrus.Debugf("UDP Got event %s: %v", event.Name, event.Data.(*network.CommandFESL))
 			default:
-				logrus.Debugf("UDP event %s: %v", event.Name, event.Data)
+				logrus.Debugf("UDP Got event %s: %v", event.Name, event.Data)
 			}
 		case event := <-tm.socket.EventChan:
 			switch event.Name {
@@ -120,9 +120,9 @@ func (tm *Theater) Listen() {
 			case "client.close":
 				tm.close(event.Data.(network.EventClientClose))
 			case "client.command":
-				logrus.WithFields(logrus.Fields{"srv": tm.name, "cmd": event.Name}).Debugf("Event")
+				logrus.WithFields(logrus.Fields{"srv": tm.name, "cmd": event.Name}).Debugf("Got event")
 			default:
-				logrus.WithFields(logrus.Fields{"srv": tm.name, "cmd": event.Name}).Debugf("Event")
+				logrus.WithFields(logrus.Fields{"srv": tm.name, "cmd": event.Name}).Debugf("Got event")
 			}
 		}
 	}
@@ -140,7 +140,7 @@ func (tm *Theater) newClient(event network.EventNewClient) {
 	logrus.Println("Client connecting")
 
 	// Start Heartbeat
-	event.Client.State.HeartTicker = time.NewTicker(time.Second * 30)
+	event.Client.State.HeartTicker = time.NewTicker(time.Second * 15)
 	go func() {
 		for {
 			if !event.Client.IsActive {

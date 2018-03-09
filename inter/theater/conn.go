@@ -3,8 +3,8 @@ package theater
 import (
 	"time"
 
-	"github.com/Synaxis/bfheroesFesl/inter/network"
-	"github.com/Synaxis/bfheroesFesl/inter/network/codec"
+	"bitbucket.org/openheroes/backend/internal/network"
+	"bitbucket.org/openheroes/backend/internal/network/codec"
 
 	"github.com/sirupsen/logrus"
 )

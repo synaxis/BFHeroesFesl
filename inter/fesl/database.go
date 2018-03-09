@@ -2,28 +2,27 @@ package fesl
 
 import (
 	"database/sql"
-	"strings"
 
 	"github.com/sirupsen/logrus"
 )
 
 type Database struct {
-	db   *sql.DB
-	name string
+	db *sql.DB
 
 	// Database Statements
-	stmtGetUserByGameToken          *sql.Stmt
-	stmtGetServerBySecret           *sql.Stmt
-	stmtGetServerByID               *sql.Stmt
-	stmtGetServerByName             *sql.Stmt
-	stmtGetHeroesByUserID           *sql.Stmt
-	stmtGetHeroeByName              *sql.Stmt
-	stmtGetHeroeByID                *sql.Stmt
-	stmtClearGameServerStats        *sql.Stmt
-	mapGetStatsVariableAmount       map[int]*sql.Stmt
-	mapGetServerStatsVariableAmount map[int]*sql.Stmt
-	mapSetStatsVariableAmount       map[int]*sql.Stmt
-	mapSetServerStatsVariableAmount map[int]*sql.Stmt
+	stmtGetUserByGameToken              *sql.Stmt
+	stmtGetServerBySecret               *sql.Stmt
+	stmtGetServerByID                   *sql.Stmt
+	stmtGetServerByName                 *sql.Stmt
+	stmtGetCountOfPermissionByIDAndSlug *sql.Stmt
+	stmtGetHeroesByUserID               *sql.Stmt
+	stmtGetHeroeByName                  *sql.Stmt
+	stmtGetHeroeByID                    *sql.Stmt
+	stmtClearGameServerStats            *sql.Stmt
+	mapGetStatsVariableAmount           map[int]*sql.Stmt
+	mapGetServerStatsVariableAmount     map[int]*sql.Stmt
+	mapSetStatsVariableAmount           map[int]*sql.Stmt
+	mapSetServerStatsVariableAmount     map[int]*sql.Stmt
 }
 
 func NewDatabase(conn *sql.DB) (*Database, error) {
@@ -135,30 +134,6 @@ func (d *Database) prepareStatements() {
 		logrus.Fatalln("Error preparing stmtGetUserByGameToken.", err.Error())
 	}
 
-	d.stmtGetHeroesByUserID, err = d.db.Prepare(
-		"SELECT id, user_id, heroName, online" +
-			"	FROM game_heroes" +
-			"	WHERE user_id = ?")
-	if err != nil {
-		logrus.Fatalln("Error preparing stmtGetHeroesByUserID.", err.Error())
-	}
-
-	d.stmtGetHeroeByName, err = d.db.Prepare(
-		"SELECT id, user_id, heroName, online" +
-			"	FROM game_heroes" +
-			"	WHERE heroName = ?")
-	if err != nil {
-		logrus.Fatalln("Error preparing stmtGetHeroesByUserID.", err.Error())
-	}
-
-	d.stmtGetHeroeByID, err = d.db.Prepare(
-		"SELECT id, user_id, heroName, online" +
-			"	FROM game_heroes" +
-			"	WHERE id = ?")
-	if err != nil {
-		logrus.Fatalln("Error preparing stmtGetHeroeByID.", err.Error())
-	}
-
 	d.stmtGetServerBySecret, err = d.db.Prepare(
 		"SELECT game_servers.id, users.id, game_servers.servername, game_servers.secretKey, users.username" +
 			"	FROM game_servers" +
@@ -189,6 +164,45 @@ func (d *Database) prepareStatements() {
 		logrus.Fatalln("Error preparing stmtGetServerByName.", err.Error())
 	}
 
+	d.stmtGetCountOfPermissionByIDAndSlug, err = d.db.Prepare(
+		"SELECT count(permissions.slug)" +
+			"	FROM users" +
+			"	LEFT JOIN role_user" +
+			"		ON users.id=role_user.user_id" +
+			"	LEFT JOIN permission_role" +
+			"		ON permission_role.role_id=role_user.role_id" +
+			"	LEFT JOIN permissions" +
+			"		ON permissions.id=permission_role.permission_id" +
+			"	WHERE users.id = ?" +
+			"		AND permissions.slug = ?")
+	if err != nil {
+		logrus.Fatalln("Error preparing stmtGetCountOfPermissionByIdAndSlug.", err.Error())
+	}
+
+	d.stmtGetHeroesByUserID, err = d.db.Prepare(
+		"SELECT id, user_id, heroName, online" +
+			"	FROM game_heroes" +
+			"	WHERE user_id = ?")
+	if err != nil {
+		logrus.Fatalln("Error preparing stmtGetHeroesByUserID.", err.Error())
+	}
+
+	d.stmtGetHeroeByName, err = d.db.Prepare(
+		"SELECT id, user_id, heroName, online" +
+			"	FROM game_heroes" +
+			"	WHERE heroName = ?")
+	if err != nil {
+		logrus.Fatalln("Error preparing stmtGetHeroesByUserID.", err.Error())
+	}
+
+	d.stmtGetHeroeByID, err = d.db.Prepare(
+		"SELECT id, user_id, heroName, online" +
+			"	FROM game_heroes" +
+			"	WHERE id = ?")
+	if err != nil {
+		logrus.Fatalln("Error preparing stmtGetHeroeByID.", err.Error())
+	}
+
 	d.stmtClearGameServerStats, err = d.db.Prepare(
 		"DELETE FROM game_server_stats")
 	if err != nil {
@@ -201,6 +215,7 @@ func (d *Database) closeStatements() {
 	d.stmtGetServerBySecret.Close()
 	d.stmtGetServerByID.Close()
 	d.stmtGetServerByName.Close()
+	d.stmtGetCountOfPermissionByIDAndSlug.Close()
 	d.stmtGetHeroesByUserID.Close()
 	d.stmtGetHeroeByName.Close()
 	d.stmtClearGameServerStats.Close()
@@ -214,15 +229,4 @@ func (d *Database) closeStatements() {
 	for index := range d.mapSetStatsVariableAmount {
 		d.mapSetStatsVariableAmount[index].Close()
 	}
-}
-
-// MysqlRealEscapeString - you know
-func MysqlRealEscapeString(value string) string {
-	replace := map[string]string{"\\": "\\\\", "'": `\'`, "\\0": "\\\\0", "\n": "\\n", "\r": "\\r", `"`: `\"`, "\x1a": "\\Z"}
-
-	for b, a := range replace {
-		value = strings.Replace(value, b, a, -1)
-	}
-
-	return value
 }

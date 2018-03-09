@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/Synaxis/bfheroesFesl/config"
-	"github.com/Synaxis/bfheroesFesl/inter/network"
-	"github.com/Synaxis/bfheroesFesl/inter/network/codec"
+	"bitbucket.org/openheroes/backend/config"
+	"bitbucket.org/openheroes/backend/internal/network"
+	"bitbucket.org/openheroes/backend/internal/network/codec"
 
 	"github.com/sirupsen/logrus"
 )
@@ -33,12 +33,12 @@ type memCheck struct {
 	Addr   string `fesl:"addr"`
 }
 
-func (fm *FeslManager) fsysMemCheck(client *network.Client) {
-	client.WriteEncode(&codec.Packet{
+func (fm *FeslManager) fsysMemCheck(event *network.EventNewClient) {
+	event.Client.WriteEncode(&codec.Packet{
 		Type: fsys,
 		Payload: ansMemCheck{
 			Taxon: fsysMemCheck,
-			Salt:  "",
+			Salt:  "5",
 		},
 		Step: 0xC0000000,
 	})
@@ -90,10 +90,12 @@ func (fm *FeslManager) hello(event network.EventClientCommand) {
 	event.Client.HashState.SetM(saveRedis)
 
 	ans := ansHello{
-		Taxon:       fsysHello,
-		ConnTTL:     int((1 * time.Hour).Seconds()),
-		ConnectedAt: time.Now().Format("Jan-02-2006 15:04:05 MST"),
-		TheaterIP:   config.General.ThtrAddr,
+		Taxon:         fsysHello,
+		ConnTTL:       int((1 * time.Hour).Seconds()),
+		ConnectedAt:   time.Now().Format("Jan-02-2006 15:04:05 MST"),
+		TheaterIP:     config.General.ThtrAddr,
+		MessengerIP:   config.General.TelemetricsIP,
+		MessengerPort: config.General.TelemetricsPort,
 	}
 
 	if fm.server {
@@ -113,6 +115,7 @@ func (fm *FeslManager) hello(event network.EventClientCommand) {
 
 const (
 	pingEUCentral = "iad"
+	pingUSEast    = "nrt"
 )
 
 type ansGetPingSites struct {
@@ -139,9 +142,10 @@ func (fm *FeslManager) GetPingSites(event network.EventClientCommand) {
 		Step: event.Command.PayloadID,
 		Payload: ansGetPingSites{
 			Taxon:    fsysGetPingSites,
-			MinPings: 1,
+			MinPings: 2,
 			PingSites: []pingSite{
-				{"8.8.8.8", pingEUCentral, 0},
+				{"170.81.42.28", pingEUCentral, 0},
+				{"170.81.42.28", pingUSEast, 0},
 			},
 		},
 	})

@@ -1,8 +1,8 @@
 package fesl
 
 import (
-	"github.com/Synaxis/bfheroesFesl/inter/network"
-	"github.com/Synaxis/bfheroesFesl/inter/network/codec"
+	"bitbucket.org/openheroes/backend/internal/network"
+	"bitbucket.org/openheroes/backend/internal/network/codec"
 )
 
 const (
@@ -14,6 +14,7 @@ const (
 	// gsumAddPlayerInfo          = "AddPlayerInfo"
 	// gsumAddStats               = "AddStats"
 	// gsumAddTeamInfo            = "AddTeamInfo"
+	// gsumEndReport              = "EndReport"
 	// gsumGameSummaryUpdateState = "GameSummaryUpdateState"
 	// gsumGetGameData            = "GetGameData"
 	// gsumGetGameEvents          = "GetGameEvents"
@@ -22,6 +23,7 @@ const (
 	// gsumGetPlayerInfo          = "GetPlayerInfo"
 	gsumGetSessionID = "GetSessionId"
 	// gsumGetTeamInfo            = "GetTeamInfo"
+	// gsumStartReport            = "StartReport"
 )
 
 type ansGetSessionID struct {

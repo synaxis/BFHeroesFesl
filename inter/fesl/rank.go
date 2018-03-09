@@ -3,8 +3,8 @@ package fesl
 import (
 	"strconv"
 
-	"github.com/Synaxis/bfheroesFesl/inter/network"
-	"github.com/Synaxis/bfheroesFesl/inter/network/codec"
+	"bitbucket.org/openheroes/backend/internal/network"
+	"bitbucket.org/openheroes/backend/internal/network/codec"
 
 	"github.com/sirupsen/logrus"
 )
@@ -51,7 +51,7 @@ func (fm *FeslManager) GetStats(event network.EventClientCommand) {
 		var id, userID, heroName, online string
 		err := fm.db.stmtGetHeroeByID.QueryRow(owner).Scan(&id, &userID, &heroName, &online)
 		if err != nil {
-			logrus.Println("server clientType!")
+			logrus.Println("Persona not worthy!")
 			return
 		}
 
@@ -65,7 +65,7 @@ func (fm *FeslManager) GetStats(event network.EventClientCommand) {
 		OwnerType: 1,
 	}
 
-	// Gen args list for statement -> heroID,userID,key1,key2,key3,..
+	// Generate our argument list for the statement -> heroID, userID, key1, key2, key3, ...
 	var args []interface{}
 	statsKeys := make(map[string]string)
 	args = append(args, owner)
@@ -114,12 +114,19 @@ type ansUpdateStats struct {
 	Users []userStats `fesl:"u"`
 }
 
+// "u.0.o": "3",
+// "u.0.ot": "1",
 type userStats struct {
 	O     int          `fesl:"o"`
 	Ot    int          `fesl:"ot"`
 	Stats []updateStat `fesl:"s"`
 }
 
+// "u.0.s.0.k": "c_ltp",
+// "u.0.s.0.pt": "0",
+// "u.0.s.0.t": "",
+// "u.0.s.0.ut": "0",
+// "u.0.s.0.v": "9025.0000",
 type updateStat struct {
 	Key   string `fesl:"k"`
 	Pt    int    `fesl:"pt"`
@@ -248,7 +255,7 @@ func (fm *FeslManager) UpdateStats(event network.EventClientCommand) {
 					}
 
 					if intValue <= 0 || event.Client.HashState.Get("clientType") == "server" || key == "c_ltp" || key == "c_sln" || key == "c_ltm" || key == "c_slm" || key == "c_wmid0" || key == "c_wmid1" || key == "c_tut" || key == "c_wmid2" {
-						// limit keys for the server only(TODO CHANGE THIS )
+						// Only allow increasing numbers (like HeroPoints) by the server for now
 						newValue := stats[key].value + intValue
 
 						if key == "c_wallet_hero" && newValue < 0 {

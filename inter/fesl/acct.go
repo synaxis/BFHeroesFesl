@@ -3,28 +3,38 @@ package fesl
 import (
 	"strconv"
 
-	"github.com/Synaxis/bfheroesFesl/inter/network"
-	"github.com/Synaxis/bfheroesFesl/inter/network/codec"
+	"bitbucket.org/openheroes/backend/internal/network"
+	"bitbucket.org/openheroes/backend/internal/network/codec"
 
 	"github.com/sirupsen/logrus"
 )
 
 const (
-	acct                  = "acct"
+	acct = "acct"
+
+	// acctGameSpyPreAuth         = "GameSpyPreAuth"
+	// acctGetCountryList         = "GetCountryList"
+	// acctGetLockerURL           = "GetLockerURL"
 	acctGetTelemetryToken = "GetTelemetryToken"
+	// acctNuAddAccount           = "NuAddAccount"
+	// acctNuAddPersona           = "NuAddPersona"
 	// acctNuCreateEncryptedToken = "NuCreateEncryptedToken"
+	// acctNuDisablePersona       = "NuDisablePersona"
 	// acctNuEntitleGame          = "NuEntitleGame"
 	// acctNuEntitleUser          = "NuEntitleUser"
 	acctNuGetAccount = "NuGetAccount"
 	// acctNuGetAccountByNuid     = "NuGetAccountByNuid"
 	// acctNuGetEntitlementCount  = "NuGetEntitlementCount"
 	// acctNuGetEntitlements      = "NuGetEntitlements"
-	acctNuGetPersonas    = "NuGetPersonas"
+	acctNuGetPersonas = "NuGetPersonas"
+	// acctNuGetTos               = "NuGetTos"
 	acctNuLogin          = "NuLogin"
 	acctNuLoginPersona   = "NuLoginPersona"
 	acctNuLookupUserInfo = "NuLookupUserInfo"
 	// acctNuSearchOwners         = "NuSearchOwners"
+	// acctNuSuggestPersonas      = "NuSuggestPersonas"
 	// acctNuUpdateAccount        = "NuUpdateAccount"
+	// acctNuUpdatePassword       = "NuUpdatePassword"
 	// acctTransactionException   = "TransactionException"
 )
 
@@ -42,6 +52,7 @@ type userInfo struct {
 	// CID          string `fesl:"cid"` ??? = "1"
 }
 
+
 // NuLookupUserInfo - Gets basic information about a game user
 func (fm *FeslManager) NuLookupUserInfo(event network.EventClientCommand) {
 	if !event.Client.IsActive {
@@ -49,14 +60,14 @@ func (fm *FeslManager) NuLookupUserInfo(event network.EventClientCommand) {
 		return
 	}
 
-	if event.Client.HashState.Get("clientType") == "server" && event.Command.Message["userInfo.0.userName"] == "Test-Server" {
+	if event.Client.HashState.Get("clientType") == "server" && event.Command.Message["userInfo.0.userName"] == "game-server" {
 		fm.NuLookupUserInfoServer(event)
 		return
 	}
 
 	ans := ansNuLookupUserInfo{Taxon: acctNuLookupUserInfo, UserInfo: []userInfo{}}
 
-	logrus.Println("LookupUserInfo CLIENT" + event.Command.Message["userInfo.0.userName"])
+	logrus.Println("LookupUserInfo - CLIENT MODE! " + event.Command.Message["userInfo.0.userName"])
 
 	keys, _ := strconv.Atoi(event.Command.Message["userInfo.[]"])
 	for i := 0; i < keys; i++ {
@@ -124,7 +135,7 @@ type ansNuLoginPersona struct {
 // NuLoginPersona - soldier login command
 func (fm *FeslManager) NuLoginPersona(event network.EventClientCommand) {
 	if !event.Client.IsActive {
-		logrus.Println("C Left")
+		logrus.Println("Client left")
 		return
 	}
 
@@ -137,7 +148,7 @@ func (fm *FeslManager) NuLoginPersona(event network.EventClientCommand) {
 	var id, userID, heroName, online string
 	err := fm.db.stmtGetHeroeByName.QueryRow(event.Command.Message["name"]).Scan(&id, &userID, &heroName, &online)
 	if err != nil {
-		logrus.Println("Wrong Login")
+		logrus.Println("Persona1 not worthy!")
 		return
 	}
 
@@ -165,12 +176,12 @@ func (fm *FeslManager) NuLoginPersona(event network.EventClientCommand) {
 	})
 }
 
-// NuLoginPersonaServer Pre-Server Login (out of order ?)
+// NuLoginPersonaServer - soldier login command
 func (fm *FeslManager) NuLoginPersonaServer(event network.EventClientCommand) {
 	var id, userID, servername, secretKey, username string
 	err := fm.db.stmtGetServerByName.QueryRow(event.Command.Message["name"]).Scan(&id, &userID, &servername, &secretKey, &username)
 	if err != nil {
-		logrus.Println("Wrong Server Login")
+		logrus.Println("Persona2 not worthy!")
 		return
 	}
 
@@ -194,6 +205,7 @@ func (fm *FeslManager) NuLoginPersonaServer(event network.EventClientCommand) {
 	})
 }
 
+
 type ansNuGetPersonas struct {
 	Taxon    string   `fesl:"TXN"`
 	Personas []string `fesl:"personas"`
@@ -202,7 +214,7 @@ type ansNuGetPersonas struct {
 // NuGetPersonas - Soldier data lookup call
 func (fm *FeslManager) NuGetPersonas(event network.EventClientCommand) {
 	if !event.Client.IsActive {
-		logrus.Println("Client Left")
+		logrus.Println("Client left")
 		return
 	}
 
@@ -239,6 +251,7 @@ func (fm *FeslManager) NuGetPersonas(event network.EventClientCommand) {
 	})
 }
 
+
 // NuGetPersonasServer - Soldier data lookup call for servers
 func (fm *FeslManager) NuGetPersonasServer(event network.EventClientCommand) {
 	logrus.Println("SERVER CONNECT")
@@ -270,15 +283,17 @@ func (fm *FeslManager) NuGetPersonasServer(event network.EventClientCommand) {
 	})
 }
 
+
 // NuGetAccount - General account information retrieved, based on parameters sent
 func (fm *FeslManager) NuGetAccount(event network.EventClientCommand) {
 	if !event.Client.IsActive {
-		logrus.Println("Client Left")
+		logrus.Println("Client left")
 		return
 	}
 
 	fm.acctNuGetAccount(&event)
 }
+
 
 type ansNuGetAccount struct {
 	Taxon          string `fesl:"TXN"`
@@ -294,6 +309,7 @@ type ansNuGetAccount struct {
 	ThidPartyOptIn bool   `fesl:"thidPartyOptin"`
 }
 
+
 func (fm *FeslManager) acctNuGetAccount(event *network.EventClientCommand) {
 	event.Client.WriteEncode(&codec.Packet{
 		Type: acct,
@@ -303,7 +319,7 @@ func (fm *FeslManager) acctNuGetAccount(event *network.EventClientCommand) {
 			Language:       "en_US",
 			DobDay:         1,
 			DobMonth:       1,
-			DobYear:        2018,
+			DobYear:        2017,
 			GlobalOptIn:    false,
 			ThidPartyOptIn: false,
 			NucleusID:      event.Client.HashState.Get("email"),
@@ -314,6 +330,7 @@ func (fm *FeslManager) acctNuGetAccount(event *network.EventClientCommand) {
 	})
 }
 
+
 type ansNuLogin struct {
 	Taxon     string `fesl:"TXN"`
 	ProfileID string `fesl:"profileId"`
@@ -322,6 +339,7 @@ type ansNuLogin struct {
 	Lkey      string `fesl:"lkey"`
 }
 
+
 type ansNuLoginErr struct {
 	Taxon   string                `fesl:"TXN"`
 	Message string                `fesl:"localizedMessage"`
@@ -329,11 +347,13 @@ type ansNuLoginErr struct {
 	Code    int                   `fesl:"errorCode"`
 }
 
+
 type nuLoginContainerErr struct {
 	Value      string `fesl:"value"`
 	FieldError string `fesl:"fieldError"`
 	FieldName  string `fesl:"fieldName"`
 }
+
 
 // NuLogin - master login command
 // TODO: Here we can implement a banlist/permission check if player is allowed to play/join
@@ -352,7 +372,7 @@ func (fm *FeslManager) NuLogin(event network.EventClientCommand) {
 		event.Client.WriteEncode(&codec.Packet{
 			Payload: ansNuLoginErr{
 				Taxon:   acctNuLogin,
-				Message: `"Wrong Login/Spoof"`,
+				Message: `"The user is not entitled to access this game"`,
 				Code:    120,
 			},
 			Step: event.Command.PayloadID,
@@ -391,6 +411,7 @@ func (fm *FeslManager) NuLogin(event network.EventClientCommand) {
 	})
 }
 
+
 // NuLoginServer - login command for servers
 func (fm *FeslManager) NuLoginServer(event network.EventClientCommand) {
 	var id, userID, servername, secretKey, username string
@@ -400,7 +421,7 @@ func (fm *FeslManager) NuLoginServer(event network.EventClientCommand) {
 		event.Client.WriteEncode(&codec.Packet{
 			Payload: ansNuLoginErr{
 				Taxon:   acctNuLogin,
-				Message: `"Wrong Server "`,
+				Message: `"The password the user specified is incorrect"`,
 				Code:    122,
 			},
 			Step: event.Command.PayloadID,
@@ -432,6 +453,29 @@ func (fm *FeslManager) NuLoginServer(event network.EventClientCommand) {
 			UserID:    userID,
 			NucleusID: username,
 			Lkey:      lkey,
+		},
+		Step: event.Command.PayloadID,
+		Type: acct,
+	})
+}
+
+
+type ansGetTelemetryToken struct {
+	Taxon          string `fesl:"TXN"`
+	TelemetryToken string `fesl:"telemetryToken"`
+	Enabled        string `fesl:"enabled"`
+	Filters        string `fesl:"filters"`
+	Disabled       bool   `fesl:"disabled"`
+}
+
+
+// GetTelemetryToken
+func (fm *FeslManager) GetTelemetryToken(event network.EventClientCommand) {
+	event.Client.WriteEncode(&codec.Packet{
+		Payload: ansGetTelemetryToken{
+			Taxon:          acctGetTelemetryToken,
+			TelemetryToken: `MTU5LjE1My4yMzUuMjYsOTk0NixlblVTLF7ZmajcnLfGpKSJk53K/4WQj7LRw9asjLHvxLGhgoaMsrDE3bGWhsyb4e6woYKGjJiw4MCBg4bMsrnKibuDppiWxYKditSp0amvhJmStMiMlrHk4IGzhoyYsO7A4dLM26rTgAo%3d`,
+			Enabled:        "US",
 		},
 		Step: event.Command.PayloadID,
 		Type: acct,

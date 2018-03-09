@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"net"
 
-	"github.com/Synaxis/bfheroesFesl/inter/matchmaking"
-	"github.com/Synaxis/bfheroesFesl/inter/network"
-	"github.com/Synaxis/bfheroesFesl/inter/network/codec"
+	"bitbucket.org/openheroes/backend/internal/matchmaking"
+	"bitbucket.org/openheroes/backend/internal/network"
+	"bitbucket.org/openheroes/backend/internal/network/codec"
 
 	"github.com/sirupsen/logrus"
 )
@@ -39,7 +39,7 @@ func (tm *Theater) CGAM(event network.EventClientCommand) {
 		event.Command.Message["B-version"],
 	)
 	if err != nil {
-		logrus.Error("Cannot create New server", err)
+		logrus.Error("Cannot create new server", err)
 		return
 	}
 

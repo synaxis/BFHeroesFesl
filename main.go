@@ -1,16 +1,15 @@
 package main
 
 import (
-	"context"
 	"database/sql"
 	"flag"
 
-	"github.com/Synaxis/bfheroesFesl/config"
-	"github.com/Synaxis/bfheroesFesl/inter/fesl"
-	"github.com/Synaxis/bfheroesFesl/inter/theater"
-	"github.com/Synaxis/bfheroesFesl/server"
-	"github.com/Synaxis/bfheroesFesl/storage/database"
-	"github.com/Synaxis/bfheroesFesl/storage/level"
+	"bitbucket.org/openheroes/backend/config"
+	"bitbucket.org/openheroes/backend/internal/fesl"
+	"bitbucket.org/openheroes/backend/internal/theater"
+	"bitbucket.org/openheroes/backend/server"
+	"bitbucket.org/openheroes/backend/storage/database"
+	"bitbucket.org/openheroes/backend/storage/level"
 
 	"github.com/sirupsen/logrus"
 	"github.com/subosito/gotenv"
@@ -27,14 +26,17 @@ func main() {
 	mdb, _ := newMySQL()
 	ldb, _ := newLevelDB()
 
-	ctx, cancel := context.WithCancel(context.Background())
-	defer func() {
-		cancel()
-	}()
-	startServer(ctx, ldb)
+	startServer(mdb, ldb)
 
-	logrus.Println("Serving...")
-	<-ctx.Done()
+	logrus.Println("Serving..")
+
+	// Use "github.com/google/gops/agent" to analyze resources
+	// if err := agent.Listen(&agent.Options{}); err != nil {
+	// 	log.Fatal(err)
+	// }
+
+	a := make(chan bool)
+	<-a
 }
 
 func initConfig() {
@@ -47,6 +49,15 @@ func initConfig() {
 
 func initLogger() {
 	logrus.SetLevel(config.LogLevel())
+
+	// logrus.SetFormatter(&logrus.JSONFormatter{
+	// 	DisableTimestamp: true,
+	// })
+	// logrus.SetFormatter(new(prefixed.TextFormatter))
+	// logrus.SetFormatter(&prefixed.TextFormatter{
+	// 	DisableTimestamp: true,
+	// 	DisableColors:    true,
+	// })
 }
 
 func newMySQL() (*sql.DB, error) {
@@ -59,6 +70,15 @@ func newMySQL() (*sql.DB, error) {
 }
 
 func newLevelDB() (*level.Level, error) {
+	// Redis Connection
+	// redisClient := redis.NewClient(&redis.Options{
+	// 	Addr: "192.168.33.10:6379",
+	// })
+	// if _, err = redisClient.Ping().Result(); err != nil {
+	// 	log.Fatalln("Error connecting to redis:", err)
+	// }
+
+	// lvl, err := level.New("_data/lvl.db", redisClient)
 	lvl, err := level.New(config.General.LevelDBPath, nil)
 	if err != nil {
 		logrus.Fatal(err)
