@@ -5,3 +5,4 @@ main
 
 _data/lvl.db
 *.env
+vendor/github.com/Synaxis/logrus/
