@@ -6,16 +6,16 @@ import (
 )
 
 type ansECHO struct {
-	TID       string `fesl:"TID"`
-	TXN       string `fesl:"TXN"`
-	IP        string `fesl:"IP"`
-	Port      int    `fesl:"PORT"`
-	ErrStatus int    `fesl:"ERR"`
-	Message   int    `fesl:"TYPE"`
+	TID       	string `fesl:"TID"`
+	IP        	string `fesl:"IP"`
+	Port      	int    `fesl:"PORT"`
+	Error    	int    `fesl:"ERR"`
+	TYPE      	int    `fesl:"TYPE"`
+	UGID      	string `fesl:"UGID"`
+	UID       	string `fesl:"UID"`
 }
 
-//TODO check typo network.EventClientProcess
-// ECHO - SHARED called like some heartbeat
+// ECHO - Broadcast to NAT Interface The Server
 func (tm *Theater) ECHO(event network.SocketUDPEvent) {
 	Process := event.Data.(*network.ProcessFESL)
 	ECHO := Process.Msg
@@ -24,11 +24,12 @@ func (tm *Theater) ECHO(event network.SocketUDPEvent) {
 		Message: thtrECHO,
 		Content: ansECHO{
 			TID:       ECHO["TID"],
-			TXN:       ECHO["TXN"],
+			UGID:      ECHO["UGID"],
+			TYPE:      1,
+			UID:       ECHO["UID"],
 			IP:        event.Addr.IP.String(),
 			Port:      event.Addr.Port,
-			ErrStatus: 0,
-			Message:   1,
+			Error: 0,						
 		},
 	}, event.Addr)
 }

@@ -12,16 +12,16 @@ import (
 
 type answerUSER struct {
 	TID      string `fesl:"TID"`
-	Name     string `fesl:"NAME"` // ServerName / ClientName
-	ClientID string `fesl:"CID"`  // ?
+	Name     string `fesl:"NAME"` // ServerName
+	ClientID string `fesl:"CID"`  //clientID
 }
 
 func (tm *Theater) NewState(ident string) *level.State {
 	return tm.level.NewState(ident)
 }
 
-// USER - SHARED Called to get user data about client? No idea
-func (tm *Theater) USER(event network.EventClientProcess) {
+// USER - Check User for Login - server not working atm
+func (tm *Theater) USER(event network.EvProcess) {
 	if !event.Client.IsActive {
 		logrus.Println("Cli Left")
 		return
@@ -43,6 +43,7 @@ func (tm *Theater) USER(event network.EventClientProcess) {
 	event.Client.Answer(&codec.Packet{
 		Message: thtrUSER,
 		Content: answerUSER{
+			ClientID: event.Process.Msg["CID"],
 			TID:  event.Process.Msg["TID"],
 			Name: lkeyRedis.Get("name"),
 		},

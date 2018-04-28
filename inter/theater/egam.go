@@ -32,6 +32,7 @@ type ansEGRQ struct {
 	RUid         string `fesl:"R-UID"`
 	RUAccid      string `fesl:"R-U-accid"`
 	RUElo        string `fesl:"R-U-elo"`
+	Platform	 string `fesl:"PL"`
 	RUTeam       string `fesl:"R-U-team"`
 	RUKit        string `fesl:"R-U-kit"`
 	RULvl        string `fesl:"R-U-lvl"`
@@ -64,12 +65,13 @@ type ansEGEG struct {
 	GameID   string `fesl:"GID"`
 }
 
-// EGAM - CLIENT called when a client wants to join a gameserver
-func (tm *Theater) EGAM(event network.EventClientProcess) {
+// EGAM - EnterGameRequest
+func (tm *Theater) EGAM(event network.EvProcess) {
 	gameID := event.Process.Msg["GID"]
 	externalIP := event.Client.IpAddr.(*net.TCPAddr).IP.String()
 	lobbyID := event.Process.Msg["LID"]
-	pid := event.Client.HashState.Get("id")
+	pid := event.Client.HashState.Get("id")  //playerID
+	logrus.Println("====EGAM==")
 
 	event.Client.Answer(&codec.Packet{
 		Message: thtrEGAM,
@@ -107,7 +109,7 @@ func (tm *Theater) EGAM(event network.EventClientProcess) {
 		gameServer.Answer(&codec.Packet{
 			Message: thtrEGRQ,
 			Content: ansEGRQ{
-				TID:          "0",
+				TID:          event.Process.Msg["TID"],
 				Name:         stats["heroName"],
 				UserID:       stats["userID"],
 				PlayerID:     pid,
@@ -125,6 +127,7 @@ func (tm *Theater) EGAM(event network.EventClientProcess) {
 				RUKit:        stats["c_kit"],
 				RULvl:        stats["level"],
 				RUDataCenter: "iad",
+				Platform:	  event.Process.Msg["PC"],
 				RUExternalIP: externalIP,
 				RUInternalIP: event.Process.Msg["R-INT-IP"],
 				RUCategory:   event.Process.Msg["R-U-category"],
@@ -136,12 +139,14 @@ func (tm *Theater) EGAM(event network.EventClientProcess) {
 				GameID:       gameID,
 			},
 		})
+		logrus.Println("====EGRQ==")
+
 
 		// Client
 		event.Client.Answer(&codec.Packet{
 			Message: thtrEGEG,
 			Content: ansEGEG{
-				TID:      "0",
+				TID:      event.Process.Msg["TID"],
 				Ticket:   "2018751182",
 				PlayerID: pid,
 				IP:       gsData.Get("IP"),
@@ -150,11 +155,14 @@ func (tm *Theater) EGAM(event network.EventClientProcess) {
 				Ekey:     "O65zZ2D2A58mNrZw1hmuJw%3d%3d",
 				IntIP:    gsData.Get("INT-IP"),
 				IntPort:  gsData.Get("INT-PORT"),
-				Secret:   "2587913",
+				Secret:   "MargeSimpson",
+				Platform: event.Process.Msg["PC"],
 				Ugid:     gsData.Get("UGID"),
 				LobbyID:  lobbyID,
 				GameID:   gameID,
 			},
 		})
+		logrus.Println("====EGEG==")
+
 	}
 }

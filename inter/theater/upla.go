@@ -8,7 +8,7 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-func (tM *Theater) UPLA(event network.EventClientProcess) {
+func (tM *Theater) UPLA(event network.EvProcess) {
 	if !event.Client.IsActive {
 		return
 	}
@@ -20,6 +20,7 @@ func (tM *Theater) UPLA(event network.EventClientProcess) {
 	pid := event.Process.Msg["PID"]
 	gid := event.Process.Msg["GID"]
 
+	// wtf
 	for index, value := range event.Process.Msg {
 		if index == "TID" || index == "PID" || index == "GID" {
 			continue

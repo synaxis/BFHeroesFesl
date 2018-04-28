@@ -47,7 +47,7 @@ type GameServer struct {
 }
 
 type ansGDAT struct {
-	Ap                  string `fesl:"AP"`
+	Ap                  string `fesl:"AP"` //act players
 	ArmyDistribution    string `fesl:"B-U-army_distribution"`
 	AvailableVipsNation string `fesl:"B-U-avail_vips_national"`
 	AvailableVipsRoyal  string `fesl:"B-U-avail_vips_royal"`
@@ -96,11 +96,10 @@ type ansGDAT struct {
 	Secret               string `fesl:"SECRET"`
 	Message              string `fesl:"TYPE"`
 	Ugid                 string `fesl:"UGID"`
-	Allowed              string `fesl:"ALLOWED"`
 }
 
 // GDAT - CLIENT called to get data about the server
-func (tm *Theater) GDAT(event network.EventClientProcess) {
+func (tm *Theater) GDAT(event network.EvProcess) {
 
 	gameID := event.Process.Msg["GID"]
 	gameServer := tm.level.NewObject("gdata", gameID)

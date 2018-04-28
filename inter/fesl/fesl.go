@@ -11,9 +11,9 @@ import (
 
 	"github.com/sirupsen/logrus"
 )
-
+// TXN stands for Taxon, sub-query name of the command
 // Fesl - handles incoming and outgoing FESL data
-type FeslManager struct {
+type Fesl struct {
 	name   string
 	db     *Database
 	level  *level.Level
@@ -22,7 +22,7 @@ type FeslManager struct {
 }
 
 // New creates and starts a new ClientManager
-func New(name, bind string, server bool, conn *sql.DB, lvl *level.Level) *FeslManager {
+func New(name, bind string, server bool, conn *sql.DB, lvl *level.Level) *Fesl {
 	db, err := NewDatabase(conn)
 	if err != nil {
 		return nil
@@ -34,7 +34,7 @@ func New(name, bind string, server bool, conn *sql.DB, lvl *level.Level) *FeslMa
 		return nil
 	}
 
-	fm := &FeslManager{
+	fm := &Fesl{
 		db:     db,
 		level:  lvl,
 		name:   name,
@@ -46,7 +46,7 @@ func New(name, bind string, server bool, conn *sql.DB, lvl *level.Level) *FeslMa
 	return fm
 }
 
-func (fm *FeslManager) run() {
+func (fm *Fesl) run() {
 	// Close all database statements
 	defer fm.db.closeStatements()
 
@@ -57,42 +57,40 @@ func (fm *FeslManager) run() {
 			case "newClient":
 				fm.newClient(event.Data.(network.EventNewClient)) // TLS
 			case "client.command.Hello":
-				fm.hello(event.Data.(network.EventClientProcess))
-			case "client.command.Chunk":
-				fm.Chunk(event.Data.(network.EventClientProcess))
+				fm.hello(event.Data.(network.EvProcess))			
 			case "client.command.NuLogin":
-				fm.NuLogin(event.Data.(network.EventClientProcess))
+				fm.NuLogin(event.Data.(network.EvProcess))
 			case "client.command.NuGetPersonas":
-				fm.NuGetPersonas(event.Data.(network.EventClientProcess))
+				fm.NuGetPersonas(event.Data.(network.EvProcess))
+			case "client.command.NuGetPersonasServer":
+				fm.NuGetPersonas(event.Data.(network.EvProcess))
 			case "client.command.NuGetAccount":
-				fm.NuGetAccount(event.Data.(network.EventClientProcess))
+				fm.NuGetAccount(event.Data.(network.EvProcess))
 			case "client.command.GetStats":
-				fm.GetStats(event.Data.(network.EventClientProcess))
+				fm.GetStats(event.Data.(network.EvProcess))
 			case "client.command.NuLookupUserInfo":
-				fm.NuLookupUserInfo(event.Data.(network.EventClientProcess))
+				fm.NuLookupUserInfo(event.Data.(network.EvProcess))
 			case "client.command.NuLoginPersona":
-				fm.NuLoginPersona(event.Data.(network.EventClientProcess))
-			case "client.command.NuGrantEntitlement":
-				fm.NuGrantEntitlement(event.Data.(network.EventClientProcess))
+				fm.NuLoginPersona(event.Data.(network.EvProcess))		
 			case "client.command.GetStatsForOwners":
-				fm.GetStatsForOwners(event.Data.(network.EventClientProcess))
+				fm.GetStatsForOwners(event.Data.(network.EvProcess))
 			case "client.command.GetPingSites":
-				fm.GetPingSites(event.Data.(network.EventClientProcess))
+				fm.GetPingSites(event.Data.(network.EvProcess))
 			case "client.command.UpdateStats":
-				fm.UpdateStats(event.Data.(network.EventClientProcess))
+				fm.UpdateStats(event.Data.(network.EvProcess))
 			case "client.command.Start":
-				fm.Start(event.Data.(network.EventClientProcess))
+				fm.Start(event.Data.(network.EvProcess))
 			case "client.command.Cancel":
-				fm.Cancel(event.Data.(network.EventClientProcess))
+				fm.Cancel(event.Data.(network.EvProcess))
+			case "client.Goodbye":
+				fm.Goodbye(event.Data.(network.EvProcess))
 			case "client.close":
 				fm.close(event.Data.(network.EventClientClose)) // TLS
 			case "client.command":
-				TXN := event.Data.(network.EventClientProcess).Process.Msg["TXN"]
+				TXN := event.Data.(network.EvProcess).Process.Msg["TXN"]
 				logrus.WithFields(logrus.Fields{
 					"func": fm.name,
-					"Event": event.Command.Message,
 					"message": fmt.Sprintf("%s/TXN:%s",
-					"query":   event.Command.Query,
 						event.Name, TXN),
 				})
 			}
@@ -101,14 +99,14 @@ func (fm *FeslManager) run() {
 }
 
 // TLS
-func (fm *FeslManager) newClient(event network.EventNewClient) {
+func (fm *Fesl) newClient(event network.EventNewClient) {
 	if !event.Client.IsActive {
 		logrus.Println("Client Left")
 		return
 	}
-
 	fm.fsysMemCheck(&event)
 
+	logrus.Println("Client Connecting")
 	// Start Heartbeat
 	event.Client.State.HeartTicker = time.NewTicker(time.Second * 5)
 	go func() {
@@ -126,12 +124,10 @@ func (fm *FeslManager) newClient(event network.EventNewClient) {
 		}
 	}()
 
-	logrus.Println("Client Connecting")
-
 }
 
 // TLS
-func (fm *FeslManager) close(event network.EventClientClose) {
+func (fm *Fesl) close(event network.EventClientClose) {
 	logrus.Println("Client closed.")
 
 	if event.Client.HashState != nil {
@@ -151,6 +147,6 @@ func (fm *FeslManager) close(event network.EventClientClose) {
 	}
 }
 
-func (fm *FeslManager) createState(ident string) *level.State {
+func (fm *Fesl) createState(ident string) *level.State {
 	return fm.level.NewState(ident)
 }

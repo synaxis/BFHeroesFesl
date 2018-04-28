@@ -2,26 +2,23 @@ package theater
 
 import (
 	"strings"
-
 	"github.com/Synaxis/bfheroesFesl/inter/network"
-
 	"github.com/sirupsen/logrus"
 )
 
-func (tM *Theater) UGAM(event network.EventClientProcess) {
+func (tM *Theater) UGAM(event network.EvProcess) {
 	if !event.Client.IsActive {
 		logrus.Println("Cli Left")
 		return
 	}
 
-	gameID := event.Process.Msg["GID"]
+	gameID := event.Process.Msg["GID"] // TODO gameID := mm.FindGids()
 
 	gdata := tM.level.NewObject("gdata", gameID)
 
 	logrus.Println("Updating GameServer " + gameID)
 
 	var args []interface{}
-
 	keys := 0
 	for index, value := range event.Process.Msg {
 		if index == "TID" {
