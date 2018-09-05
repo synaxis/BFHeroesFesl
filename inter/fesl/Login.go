@@ -48,9 +48,15 @@ func (fm *Fesl) NuLogin(event network.EvProcess) {
 	}
 	event.Client.HashState.SetM(saveRedis)
 
+
+	//TODO create a function
 	// Setup a new key for our persona
-	idd, _ := uuid.NewV4()
-	lkey := idd.String()
+	
+	newRandom := uuid.NewV4()
+	var lkey string
+	lkey = newRandom.String()
+	
+	
 	lkeyRedis := fm.level.NewObject("lkeys", lkey)
 	lkeyRedis.Set("id", id)
 	lkeyRedis.Set("userID", id)
@@ -98,9 +104,12 @@ func (fm *Fesl) NuLoginPersona(event network.EvProcess) {
 		return
 	}
 
+	//TODO create a function
 	// Setup a new key for our persona
-	idd, _ := uuid.NewV4()
-	lkey := idd.String()
+	
+	newRandom := uuid.NewV4()
+	var lkey string
+	lkey = newRandom.String()
 	lkeyRedis := fm.level.NewObject("lkeys", lkey)
 	lkeyRedis.Set("id", id)
 	lkeyRedis.Set("userID", userID)
@@ -110,7 +119,7 @@ func (fm *Fesl) NuLoginPersona(event network.EvProcess) {
 	saveRedis["heroID"] = id
 	event.Client.HashState.SetM(saveRedis)
 
-	event.Client.HashState.Set("lkeys", event.Client.HashState.Get("lkeys")+";"+lkey)
+	event.Client.HashState.Set("lkeys", event.Client.HashState.Get("lkeys")+";"+lkey) //fix me
 
 	event.Client.Answer(&codec.Packet{
 		Content: ansNuLogin{ // todo check why its not nuLoginPersona struct
