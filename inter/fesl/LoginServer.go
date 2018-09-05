@@ -39,9 +39,12 @@ func (fm *Fesl) NuLoginServer(event network.EvProcess) {
 	saveRedis["keyHash"] = event.Process.Msg["password"]
 	event.Client.HashState.SetM(saveRedis)
 
-	// Setup a new key for new persona
-	idd, _ := uuid.NewV4()
-	lkey := idd.String()
+		//TODO create a function
+	// Setup a new key for our persona
+	
+	newRandom := uuid.NewV4()
+	var lkey string
+	lkey = newRandom.String()
 	lkeyRedis := fm.level.NewObject("lkeys", lkey)
 	lkeyRedis.Set("id", id)
 	lkeyRedis.Set("userID", userID)
@@ -101,8 +104,12 @@ func (fm *Fesl) NuLoginPersonaServer(event network.EvProcess) {
 	////////////Checks////////////////
 
 	// Setup a key for Server
-	idd, _ := uuid.NewV4()
-	lkey := idd.String()
+		//TODO create a function
+	// Setup a new key for our persona
+	
+	newRandom := uuid.NewV4()
+	var lkey string
+	lkey = newRandom.String()
 	lkeyRedis := fm.level.NewObject("lkeys", lkey)
 	lkeyRedis.Set("id", userID)
 	lkeyRedis.Set("userID", userID)
