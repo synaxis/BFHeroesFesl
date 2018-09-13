@@ -67,9 +67,9 @@ Battlefield Heroes uses a network communication protocol similar to many other o
 had it's own version also used in famous titles, such as Battlefield2/Battlefield2142. Need For Speed , and others.
 
 The general  consists of the following components:
-1. gameClient.exe: the front-end gameClient - for Production mode that runs on the player's computer. Consists mainly of a graphical userinterface and some game-logic.
+1. gameClient.exe: the front-end gameClient - for Production mode that runs on the player's computer.A graphical UI and some game-logic.
 
-2. gameServer.exe: the server that acts as a central game coordinator for the players in a match. Consists mainly of game logic and connections to game clients.
+2. gameServer.exe: the server that acts as a central game coordinator for the players in a match. 
 
 3.FESL Login Server. A  login System. Used mostly for authentication for account and Stats retrieving for the player. We don't know the meaning of FESL, probably front end socket-lawyer?
 
