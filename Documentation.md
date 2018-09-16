@@ -1,10 +1,9 @@
-===========================================================================================================================
+============================================================================
 # FESL PROTOCOL
-This explains the Protocol for gameClient.exe/gameServer.exe => MasterServer(Fesl Login)Theater Server for gameplay
+This explains the Protocol for gameClient.exe/gameServer.exe
 
 ## Overview
 
-It works basically as :
 1.gameClient.exe: the front-end gameClient(BFHeroes.exe) - for Production mode that runs on the player's computer. Consists mainly of a graphical userinterface and some game-logic.
 
 2.gameServer.exe: the server that acts as a central game coordinator for the players in a match. And hosts the game shared area.
