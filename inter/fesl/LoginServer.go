@@ -3,7 +3,6 @@ package fesl
 import (
 	"github.com/Synaxis/bfheroesFesl/inter/network"
 	"github.com/Synaxis/bfheroesFesl/inter/network/codec"
-	"github.com/satori/go.uuid"
 	"github.com/sirupsen/logrus"
 )
 
@@ -42,10 +41,8 @@ func (fm *Fesl) NuLoginServer(event network.EvProcess) {
 		//TODO create a function
 	// Setup a new key for our persona
 	
-	newRandom := uuid.NewV4()
-	var lkey string
-	lkey = newRandom.String()
-	lkeyRedis := fm.level.NewObject("lkeys", lkey)
+	tempKey, err := randomize()
+	lkeyRedis := fm.level.NewObject("lkeys", tempKey)
 	lkeyRedis.Set("id", id)
 	lkeyRedis.Set("userID", userID)
 	lkeyRedis.Set("name", username)
@@ -55,14 +52,14 @@ func (fm *Fesl) NuLoginServer(event network.EvProcess) {
 		return
 	}
 
-	event.Client.HashState.Set("lkeys", event.Client.HashState.Get("lkeys")+";"+lkey)
+	event.Client.HashState.Set("lkeys", event.Client.HashState.Get("lkeys")+";"+tempKey)
 	event.Client.Answer(&codec.Packet{
 		Content: ansNuLogin{
 			TXN:       acctNuLogin,
 			ProfileID: userID,
 			UserID:    userID,
 			NucleusID: username,
-			Lkey:      lkey,
+			Lkey:      tempKey,
 		},
 		Send:    event.Process.HEX,
 		Message: acct,
@@ -101,32 +98,28 @@ func (fm *Fesl) NuLoginPersonaServer(event network.EvProcess) {
 		logrus.Println("AFK")
 		return
 	}
-	////////////Checks////////////////
-
 	// Setup a key for Server
-		//TODO create a function
+    //TODO create a function  --> DONE 
 	// Setup a new key for our persona
 	
-	newRandom := uuid.NewV4()
-	var lkey string
-	lkey = newRandom.String()
-	lkeyRedis := fm.level.NewObject("lkeys", lkey)
+	tempKey, err := randomize()
+	lkeyRedis := fm.level.NewObject("lkeys", tempKey)
 	lkeyRedis.Set("id", userID)
 	lkeyRedis.Set("userID", userID)
 	lkeyRedis.Set("name", servername)
 
-	event.Client.HashState.Set("lkeys", event.Client.HashState.Get("lkeys")+";"+lkey)
+	event.Client.HashState.Set("lkeys", event.Client.HashState.Get("lkeys")+";"+tempKey)
 	event.Client.Answer(&codec.Packet{
 		Content: ansNuLogin{
 			TXN:       acctNuLoginPersona,
 			ProfileID: id,
 			UserID:    id,
-			Lkey:      lkey,
+			Lkey:      tempKey,
 			//nuid:    servername @TODO
 		},
 		Send:    event.Process.HEX,
 		Message: acct,
 	})
 
-	logrus.Println("==Success Login==")
+	logrus.Println("=====Success Login=====")
 }

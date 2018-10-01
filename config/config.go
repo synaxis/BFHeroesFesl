@@ -10,6 +10,7 @@ import (
 var (
 	General  cfg
 	Database MySQL
+	Cert     Fixtures
 )
 
 type cfg struct {
@@ -20,7 +21,9 @@ type cfg struct {
 	TelemetryToken string `envconfig:"TELEMETRY_TOKEN"`
 	LogLevel       string `envconfig:"LOG_LEVEL" default:"DEBUG"`
 
-	
+	HTTPBind  string `envconfig:"HTTP_BIND" default:"0.0.0.0:8080"`
+	HTTPSBind string `envconfig:"HTTPS_BIND" default:"0.0.0.0:443"`
+
 
 	GameSpyIP string `envconfig:"GAMESPY_IP" default:"0.0.0.0"`
 
@@ -41,6 +44,11 @@ type MySQL struct {
 	Host     string `envconfig:"DATABASE_HOST" default:"127.0.0.1"`
 	Port     int    `envconfig:"DATABASE_PORT" default:"3306"`
 	Name     string `envconfig:"DATABASE_NAME" default:"naomi"`
+}
+
+type Fixtures struct {
+	Path       string `envconfig:"CERT_PATH" default:"./config/cert.pem"`
+	PrivateKey string `envconfig:"PRIVATE_KEY_PATH" default:"./config/key.pem"`
 }
 
 func Initialize() {

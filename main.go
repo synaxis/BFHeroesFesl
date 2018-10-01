@@ -11,11 +11,16 @@ import (
 	"github.com/Synaxis/bfheroesFesl/config"
 	"github.com/Synaxis/bfheroesFesl/inter/fesl"
 	"github.com/Synaxis/bfheroesFesl/inter/theater"
+	"github.com/Synaxis/bfheroesFesl/server"
 	"github.com/Synaxis/bfheroesFesl/storage/database"
 	"github.com/Synaxis/bfheroesFesl/storage/level"
 
 	"github.com/sirupsen/logrus"
 	"github.com/subosito/gotenv"
+)
+
+var (
+	configFile string
 )
 
 func main() {
@@ -35,9 +40,7 @@ func main() {
 }
 
 func initConfig() {
-	var (
-		configFile string
-	)
+
 	flag.StringVar(&configFile, "config", ".env", "Path to configuration file")
 	flag.Parse()
 
@@ -116,4 +119,9 @@ func startServer(mdb *sql.DB, ldb *level.Level) {
 
 	theater.New("TM", config.ThtrClientAddr(), mdb, ldb)
 	theater.New("STM", config.ThtrServerAddr(), mdb, ldb)
+	srv := server.New(config.Cert)
+	srv.ListenAndServe(
+		config.General.HTTPBind,
+		config.General.HTTPSBind,
+	)
 }

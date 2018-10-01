@@ -21,6 +21,19 @@ type ansNuLogin struct {
 	Lkey      string `fesl:"lkey"`
 }
 
+//test by synaxis
+func randomize() (rand string, retErr error) {
+	newRandom, err := uuid.NewV4()
+	if err != nil {
+		logrus.Println("===issue with UUID==")
+		return
+	}
+	lkey := newRandom.String()
+	rand = lkey	
+
+	return rand, nil
+}
+
 // NuLogin - First Login Command
 func (fm *Fesl) NuLogin(event network.EvProcess) {
 
@@ -48,28 +61,23 @@ func (fm *Fesl) NuLogin(event network.EvProcess) {
 	}
 	event.Client.HashState.SetM(saveRedis)
 
-
-	//TODO create a function
 	// Setup a new key for our persona
-	
-	newRandom := uuid.NewV4()
-	var lkey string
-	lkey = newRandom.String()
-	
-	
-	lkeyRedis := fm.level.NewObject("lkeys", lkey)
+	// newRandom, err := uuid.NewV4()
+	// lkey := newRandom.String() 	
+	tempKey, err := randomize()
+	lkeyRedis := fm.level.NewObject("lkeys", tempKey)
 	lkeyRedis.Set("id", id)
 	lkeyRedis.Set("userID", id)
 	lkeyRedis.Set("name", username)
 
-	event.Client.HashState.Set("lkeys", event.Client.HashState.Get("lkeys")+";"+lkey)
+	event.Client.HashState.Set("lkeys", event.Client.HashState.Get("lkeys")+";"+tempKey)
 	event.Client.Answer(&codec.Packet{
 		Content: ansNuLogin{
 			TXN:       acctNuLogin,
 			ProfileID: id,
 			UserID:    id,
 			NucleusID: username,
-			Lkey:      lkey,
+			Lkey:      tempKey,
 		},
 		Send:    event.Process.HEX,
 		Message: acct,
@@ -82,6 +90,7 @@ type ansNuLoginPersona struct {
 	UserID    string `fesl:"userId"`
 	Lkey      string `fesl:"lkey"`
 	Encrypt   int    `fesl:"returnEncryptedInfo"`
+
 }
 
 // User Login with selected Hero (persona)
@@ -104,13 +113,9 @@ func (fm *Fesl) NuLoginPersona(event network.EvProcess) {
 		return
 	}
 
-	//TODO create a function
 	// Setup a new key for our persona
-	
-	newRandom := uuid.NewV4()
-	var lkey string
-	lkey = newRandom.String()
-	lkeyRedis := fm.level.NewObject("lkeys", lkey)
+	tempKey, err := randomize()
+	lkeyRedis := fm.level.NewObject("lkeys", tempKey)
 	lkeyRedis.Set("id", id)
 	lkeyRedis.Set("userID", userID)
 	lkeyRedis.Set("name", heroName)
@@ -119,7 +124,7 @@ func (fm *Fesl) NuLoginPersona(event network.EvProcess) {
 	saveRedis["heroID"] = id
 	event.Client.HashState.SetM(saveRedis)
 
-	event.Client.HashState.Set("lkeys", event.Client.HashState.Get("lkeys")+";"+lkey) //fix me
+	event.Client.HashState.Set("lkeys", event.Client.HashState.Get("lkeys")+";"+tempKey)
 
 	event.Client.Answer(&codec.Packet{
 		Content: ansNuLogin{ // todo check why its not nuLoginPersona struct
@@ -127,7 +132,7 @@ func (fm *Fesl) NuLoginPersona(event network.EvProcess) {
 			ProfileID: userID, // todo use PID
 			UserID:    userID,
 			Encrypt:   1,
-			Lkey:      lkey,
+			Lkey:      tempKey,
 		},
 		Send:    event.Process.HEX,
 		Message: acct,
