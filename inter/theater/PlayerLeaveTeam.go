@@ -37,7 +37,7 @@ func (tM *Theater) PLVT(event network.EvProcess) {
 	// Get 4 stats for PID
 	rows, err := tM.db.getStatsStatement(4).Query(pid, "c_kit", "c_team", "elo", "level")
 	if err != nil {
-		logrus.Errorln("Failed gettings stats for hero "+pid, err.Error())
+		logrus.Errorln("Wrong stats for hero "+pid, err.Error())
 	}
 
 	stats := make(map[string]string)
@@ -63,14 +63,14 @@ func (tM *Theater) PLVT(event network.EvProcess) {
 			logrus.Println("PLVT ", err)
 		}
 	default:
-		logrus.Println("Invalid team " + stats["c_team"] + " for " + pid)
+		logrus.Println("Wrong team " + stats["c_team"] + " for " + pid)
 	}
 
 	event.Client.Answer(&codec.Packet{ // need to check this
 		Message: thtrPLVT,
 		Content: ansPLVT{
-			event.Process.Msg["PID"],
 			event.Process.Msg["TID"],
+			event.Process.Msg["PID"],
 		},
 	})
 
@@ -79,7 +79,7 @@ func (tM *Theater) PLVT(event network.EvProcess) {
 		Content: ansKICK{
 			event.Process.Msg["PID"],
 			event.Process.Msg["LID"],
-			event.Process.Msg["TID"],
+			event.Process.Msg["GID"],
 		},
 	})
 

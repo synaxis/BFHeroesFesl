@@ -19,21 +19,17 @@ const (
 	thtrEGEG = "EGEG"
 	thtrEGRQ = "EGRQ"
 	thtrEGRS = "EGRS"
-	thtrUQUE = "UQUE" //testing
 	thtrECNL = "ECNL"
 	thtrGDAT = "GDAT"
 	thtrKICK = "KICK"
 	thtrLDAT = "LDAT"
-	thtrHTSN = "HTSN" //testing
 	thtrLLST = "LLST"
 	thtrPENT = "PENT"
 	thtrPING = "PING"
 	thtrPLVT = "PLVT"
 	thtrUBRA = "UBRA"
 	thtrUPLA = "UPLA"
-	thtrGREM = "GREM" //testing
 	thtrUSER = "USER"
-	thtrRGAM = "RGAM" //testing
 )
 
 // Theater Handles incoming and outgoing theater communication
@@ -139,7 +135,7 @@ func (tm *Theater) newClient(event network.EventNewClient) {
 	logrus.Println("Joined Theather")
 
 	// Start Heartbeat
-	event.Client.State.HeartTicker = time.NewTicker(time.Second * 5)
+	event.Client.State.HeartTicker = time.NewTicker(time.Second * 10)
 	go func() {
 		for event.Client.IsActive {
 			select {
@@ -155,7 +151,7 @@ func (tm *Theater) close(event network.EventClientClose) {
 
 	if event.Client.HashState != nil {
 
-		if event.Client.HashState.Get("gdata:GID") != "" {
+		//if event.Client.HashState.Get("gdata:GID") != "" {
 
 			// Delete game from db
 			_, err := tm.db.stmtDeleteServerStatsByGID.Exec(event.Client.HashState.Get("gdata:GID"))
@@ -173,7 +169,7 @@ func (tm *Theater) close(event network.EventClientClose) {
 
 			gameServer := tm.level.NewObject("gdata", event.Client.HashState.Get("gdata:GID"))
 			gameServer.Delete()
-		}
+		//}
 
 		event.Client.HashState.Delete()
 	}

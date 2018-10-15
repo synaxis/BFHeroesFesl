@@ -72,16 +72,16 @@ func (fm *Fesl) NuLookupUserInfo(event network.EvProcess) {
 func (fm *Fesl) NuLookupUserInfoServer(event network.EvProcess) {
 	var err error
 
-	var id, userID, servername, secretKey, username string
+	var id, userID, servername, secret, username string
+	//remember the .bat file is our login
 	err = fm.db.stmtGetServerByID.QueryRow(event.Client.HashState.Get("sID")).Scan(&id, &userID, //br
-		&servername, &secretKey, &username)
+		&servername, &secret, &username)
 
 	if err != nil {
 		logrus.Errorln(err)
 		return
 	}
 
-	HEX := event.Process.HEX
 	event.Client.Answer(&codec.Packet{
 		Content: ansNuLookupUserInfo{
 			TXN: "NuLookupUserInfo",
@@ -96,7 +96,7 @@ func (fm *Fesl) NuLookupUserInfoServer(event network.EvProcess) {
 				},
 			},
 		},
-		Send:    HEX,
+		Send:    event.Process.HEX,
 		Message: acct,
 	})
 }

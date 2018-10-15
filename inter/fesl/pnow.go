@@ -19,12 +19,10 @@ type reqStart struct {
 
 }
 
-
 type ansStart struct {
 	TXN    	string        `fesl:"TXN"`
-	ID    	string        `fesl:"id.id"`
-	Partition 	string    `fesl:"id.partition"`
-
+	ID    	string        `fesl:"id.id"`//exclusive strings from the game
+	Partition 	string    `fesl:"id.partition"`//exclusive strings from the game
 }
 
 // Start handles pnow.Start
@@ -37,7 +35,7 @@ func (fm *Fesl) Start(event network.EvProcess) {
 			ID:    "1",
 			Partition: "eagames/bfwest-dedicated",
 		},
-		Send:    event.Process.HEX,
+		Send:    0x80000000,
 		Message: pnow,
 	})
 	fm.Status(event)
@@ -46,7 +44,7 @@ func (fm *Fesl) Start(event network.EvProcess) {
 
 type Status struct {
 	TXN        string                 `fesl:"TXN"`
-	ID         string       		  `fesl:"id.id"`
+	ID         string       		  `fesl:"id.id"`//exclusive strings from the game
 	Partition 	string				  `fesl:"partition"`
 	State      string                 `fesl:"sessionState"`
 	Properties map[string]interface{} `fesl:"props"`
@@ -60,24 +58,16 @@ type stGame struct {
 
 // Status comes after Start. tells info about desired server
 func (fm *Fesl) Status(event network.EvProcess) {
-	logrus.Println("--Status--")	
-		
-	// var gid string	
-	// var err error
-
-	// err = fm.db.stmtGetBookmark.QueryRow(event.Client.HashState.Get("uID")).Scan(&gid)
-	// if err != nil {	
- 	// 	logrus.Println("no game found for player")
-	//  }	
+	logrus.Println("--Status--")			
 
 
 	var gid string	
 	var err error
-
+	//search our DB for a gameID (gid) to join fot that indivudal player(uID)
 	err = fm.db.stmtGetBookmark.QueryRow(event.Client.HashState.Get("uID")).Scan(&gid)
 	if err != nil {	
  		logrus.Println("no game found for player")
-	 }	
+	}	
 
 
 	// continuos search
@@ -101,6 +91,7 @@ func (fm *Fesl) Status(event network.EvProcess) {
 			ID:    "1",
 			Partition: "eagames/bfwest-dedicated",
 			Properties: map[string]interface{}{
+				"props.{}": "3", //the n of properties
 				"resultType": "JOIN",
 				"sessionType": "findServer",
 				"games":      gamesArray},

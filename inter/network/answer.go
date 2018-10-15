@@ -2,8 +2,6 @@ package network
 
 import (
 	"bytes"
-	//"errors"
-	//"io"
 	"net"
 
 	"github.com/Synaxis/bfheroesFesl/inter/network/codec"
