@@ -46,10 +46,12 @@ type MySQL struct {
 	Name     string `envconfig:"DATABASE_NAME" default:"naomi"`
 }
 
+//this is very important
 type Fixtures struct {
-	Path       string `envconfig:"CERT_PATH" default:"./config/cert.pem"`
-	PrivateKey string `envconfig:"PRIVATE_KEY_PATH" default:"./config/key.pem"`
+	Path       string `envconfig:"CERT_PATH" default:"config/cert.pem"`
+	PrivateKey string `envconfig:"PRIVATE_KEY_PATH" default:"config/key.pem"`
 }
+
 
 func Initialize() {
 	if err := envconfig.Process("", &General); err != nil {
@@ -57,6 +59,9 @@ func Initialize() {
 	}
 	if err := envconfig.Process("", &Database); err != nil {
 		logrus.WithError(err).Fatal("config: Initialize values for Database")
+	}
+	if err := envconfig.Process("", &Cert); err != nil {
+		logrus.Fatal(err)
 	}
 }
 

@@ -5,6 +5,8 @@ import (
 	"flag"
 	"fmt"
 
+	"os"
+
 	"strconv"
 	"strings"
 
@@ -49,7 +51,17 @@ func initConfig() {
 }
 
 func initLogger() {
+	logrus := &logrus.Logger{
+        Out:   os.Stderr,
+        Level: logrus.DebugLevel,
+		Formatter: &logrus.TextFormatter{
+            DisableColors: true,
+            TimestampFormat : "01-02 15:04:05",
+            FullTimestamp:false,
+        },
+	}
 	logrus.SetLevel(config.LogLevel())
+
 }
 
 func newMySQL() (*sql.DB, error) {
@@ -119,9 +131,12 @@ func startServer(mdb *sql.DB, ldb *level.Level) {
 
 	theater.New("TM", config.ThtrClientAddr(), mdb, ldb)
 	theater.New("STM", config.ThtrServerAddr(), mdb, ldb)
+
+
 	srv := server.New(config.Cert)
 	srv.ListenAndServe(
 		config.General.HTTPBind,
 		config.General.HTTPSBind,
 	)
 }
+

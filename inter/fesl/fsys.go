@@ -57,7 +57,7 @@ func (fm *Fesl) hello(event network.EvProcess) {
 		return
 	}
 
-	// var firstLogin = true
+	var firstLogin = true
 	if !firstLogin {
 		fm.NuLogin(event)
 	}
@@ -71,7 +71,7 @@ func (fm *Fesl) hello(event network.EvProcess) {
 	event.Client.HashState = redisState
 
 	if !fm.server {
-		fm.gsumGetSessionID(event)
+		fm.GetSessionId(event)
 	}
 
 	saveRedis := map[string]interface{}{
@@ -108,11 +108,30 @@ func (fm *Fesl) hello(event network.EvProcess) {
 	})
 	firstLogin = true
 	if !AFK {
+		fm.Goodbye(event)
 		return
 	}
 }
 
-///////////////////////////////////////////////
+type GetSessionId struct {
+	TXN string `fesl:"TXN"`
+}
+
+func (fm *Fesl) GetSessionId(event network.EvProcess) {
+
+	//Check if its a Server
+	if event.Client.HashState.Get("clientType") == "server" {
+		fm.NuLoginServer(event)
+		return
+	}
+
+	event.Client.Answer(&codec.Packet{
+		Content: GetSessionId{
+			TXN: "GetSessionId", //case sensitive
+		},
+		Message: "gsum",
+	})
+}
 type ansGoodbye struct {
 	TXN        string `fesl:"TXN"`
 	Reason     string `fesl:"reason"`

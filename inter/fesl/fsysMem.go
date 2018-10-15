@@ -7,17 +7,11 @@ import (
 )
 
 type reqMemCheck struct {
-	// TXN stands for Taxon, sub-query name of the command.
-	// Should be equal: MemCheck.
 	TXN string `fesl:"TXN"`
-
-	// FIXME: Result is usually an empty string
 	Result string `fesl:"result"`
 }
 
-type ansMemCheck struct {
-	// TXN stands for Taxon, sub-query name of the command.
-	// Should be equal: MemCheck.
+type ansMemCheck struct {	
 	TXN string `fesl:"TXN"`
 	MemChecks string `fesl:"memcheck.[]"`
 	Salt      string `fesl:"salt"`

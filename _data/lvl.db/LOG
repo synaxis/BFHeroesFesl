@@ -22,3 +22,339 @@
 00:15:03.833392 version@stat F·[] S·0B[] Sc·[]
 00:15:03.910566 db@janitor F·2 G·0
 00:15:03.910566 db@open done T·79.1719ms
+=============== Oct 13, 2018 (-03) ===============
+22:09:24.461246 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+22:09:24.462246 version@stat F·[] S·0B[] Sc·[]
+22:09:24.462246 db@open opening
+22:09:24.462246 journal@recovery F·1
+22:09:24.463246 journal@recovery recovering @4
+22:09:24.464246 version@stat F·[] S·0B[] Sc·[]
+22:09:24.526250 db@janitor F·2 G·0
+22:09:24.526250 db@open done T·64.0037ms
+22:13:15.609467 transaction@flush created L0@8 N·7 S·295B "red..ion,v1":"red..sku,v7"
+22:13:15.609467 version@stat F·[1] S·295B[295B] Sc·[0.25]
+22:14:15.774908 memdb@flush N·1 S·47B
+22:14:15.796909 memdb@flush created L0@10 N·1 S·154B "red..084,d8":"red..084,d8"
+22:14:15.796909 version@stat F·[2] S·449B[449B] Sc·[0.50]
+22:14:15.823911 memdb@flush committed F·1 T·49.0028ms
+22:14:15.823911 journal@remove removed @6
+22:14:15.875914 transaction@flush created L0@11 N·7 S·295B "red..ion,v9":"red..sku,v15"
+22:14:15.875914 version@stat F·[3] S·744B[744B] Sc·[0.75]
+=============== Oct 13, 2018 (-03) ===============
+22:28:45.521655 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+22:28:45.522655 version@stat F·[3] S·744B[744B] Sc·[0.75]
+22:28:45.522655 db@open opening
+22:28:45.522655 journal@recovery F·1
+22:28:45.522655 journal@recovery recovering @9
+22:28:45.552656 memdb@flush created L0@12 N·1 S·154B "red..136,d16":"red..136,d16"
+22:28:45.554657 version@stat F·[4] S·898B[898B] Sc·[1.00]
+22:28:45.611660 db@janitor F·6 G·0
+22:28:45.611660 db@open done T·89.0051ms
+22:28:45.630661 table@move L0@12 -> L1
+22:28:45.630661 version@stat F·[3 1] S·898B[744B 154B] Sc·[0.75 0.00]
+22:30:59.242303 transaction@flush created L0@15 N·7 S·295B "red..ion,v21":"red..sku,v20"
+22:30:59.242303 version@stat F·[4 1] S·1KiB[1KiB 154B] Sc·[1.00 0.00]
+22:30:59.276305 table@move L0@15 -> L1
+22:30:59.276305 version@stat F·[3 2] S·1KiB[744B 449B] Sc·[0.75 0.00]
+=============== Oct 13, 2018 (-03) ===============
+22:45:08.258864 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+22:45:08.259864 version@stat F·[3 2] S·1KiB[744B 449B] Sc·[0.75 0.00]
+22:45:08.259864 db@open opening
+22:45:08.259864 journal@recovery F·1
+22:45:08.259864 journal@recovery recovering @13
+22:45:08.295866 memdb@flush created L0@16 N·1 S·154B "red..725,d25":"red..725,d25"
+22:45:08.295866 version@stat F·[4 2] S·1KiB[898B 449B] Sc·[1.00 0.00]
+22:45:08.348869 db@janitor F·8 G·0
+22:45:08.348869 db@open done T·89.005ms
+22:45:08.365870 table@move L0@16 -> L1
+22:45:08.365870 version@stat F·[3 3] S·1KiB[744B 603B] Sc·[0.75 0.00]
+22:45:23.065711 transaction@flush created L0@19 N·7 S·295B "red..ion,v27":"red..sku,v33"
+22:45:23.065711 version@stat F·[4 3] S·1KiB[1KiB 603B] Sc·[1.00 0.00]
+22:45:23.089712 table@move L0@19 -> L1
+22:45:23.089712 version@stat F·[3 4] S·1KiB[744B 898B] Sc·[0.75 0.00]
+22:45:23.281723 transaction@flush created L0@20 N·4 S·232B "red..ail,v36":"red..ame,v34"
+22:45:23.281723 version@stat F·[4 4] S·1KiB[976B 898B] Sc·[1.00 0.00]
+22:45:23.305725 table@compaction L0·1 -> L1·1 S·527B Q·37
+22:45:23.349727 table@build created L1@21 N·11 S·364B "red..ion,v27":"red..ame,v34"
+22:45:23.349727 version@stat F·[3 4] S·1KiB[744B 967B] Sc·[0.75 0.00]
+22:45:23.384729 table@compaction committed F-1 S-163B Ke·0 D·0 T·79.0045ms
+22:45:23.385729 table@remove removed @20
+22:45:23.385729 table@remove removed @19
+22:45:32.207234 memdb@flush N·11 S·664B
+22:45:32.271237 memdb@flush created L0@23 N·11 S·384B "lke../id,v46":"red..d.3,v44"
+22:45:32.271237 version@stat F·[4 4] S·2KiB[1KiB 967B] Sc·[1.00 0.00]
+22:45:32.301239 memdb@flush committed F·1 T·94.0053ms
+22:45:32.301239 journal@remove removed @17
+22:45:32.302239 table@compaction L0·4 -> L1·4 S·2KiB Q·48
+22:45:32.329241 transaction@flush created L0@24 N·1 S·163B "red..oID,v49":"red..oID,v49"
+22:45:32.329241 version@stat F·[5 4] S·2KiB[1KiB 967B] Sc·[1.25 0.00]
+22:45:32.368243 table@build created L1@25 N·43 S·801B "lke../id,v46":"red..ame,v34"
+22:45:32.403245 version@stat F·[1 1] S·964B[163B 801B] Sc·[0.25 0.00]
+22:45:32.471249 table@compaction committed F-7 S-1KiB Ke·0 D·3 T·169.0097ms
+22:45:32.471249 table@remove removed @23
+22:45:32.471249 table@remove removed @11
+22:45:32.471249 table@remove removed @10
+22:45:32.471249 table@remove removed @8
+22:45:32.471249 table@remove removed @12
+22:45:32.471249 table@remove removed @16
+22:45:32.472249 table@remove removed @15
+22:45:32.472249 table@remove removed @21
+23:06:40.474775 memdb@flush N·9 S·540B
+23:06:40.500776 memdb@flush created L0@27 N·9 S·339B "lkeys:,d54":"red..rID,v52"
+23:06:40.500776 version@stat F·[2 1] S·1KiB[502B 801B] Sc·[0.50 0.00]
+23:06:40.519777 memdb@flush committed F·1 T·45.0026ms
+23:06:40.520777 journal@remove removed @22
+23:06:40.575780 transaction@flush created L0@28 N·7 S·295B "red..ion,v59":"red..sku,v65"
+23:06:40.575780 version@stat F·[3 1] S·1KiB[797B 801B] Sc·[0.75 0.00]
+23:06:40.730789 transaction@flush created L0@29 N·4 S·232B "red..ail,v68":"red..ame,v66"
+23:06:40.730789 version@stat F·[4 1] S·1KiB[1KiB 801B] Sc·[1.00 0.00]
+23:06:40.760791 table@compaction L0·4 -> L1·1 S·1KiB Q·69
+23:06:40.862797 table@build created L1@30 N·58 S·979B "lke../id,v46":"red..rID,v52"
+23:06:40.862797 version@stat F·[0 1] S·979B[0B 979B] Sc·[0.00 0.00]
+23:06:40.943801 table@compaction committed F-4 S-851B Ke·0 D·6 T·183.0104ms
+23:06:40.943801 table@remove removed @29
+23:06:40.943801 table@remove removed @28
+23:06:40.944801 table@remove removed @27
+23:06:40.944801 table@remove removed @24
+23:06:40.944801 table@remove removed @25
+23:06:44.643013 memdb@flush N·11 S·664B
+23:06:44.683015 memdb@flush created L0@32 N·11 S·381B "lke../id,v78":"red..d.3,v76"
+23:06:44.683015 version@stat F·[1 1] S·1KiB[381B 979B] Sc·[0.25 0.00]
+23:06:44.718017 memdb@flush committed F·1 T·75.0043ms
+23:06:44.718017 journal@remove removed @26
+23:06:44.783021 transaction@flush created L0@33 N·1 S·163B "red..oID,v81":"red..oID,v81"
+23:06:44.783021 version@stat F·[2 1] S·1KiB[544B 979B] Sc·[0.50 0.00]
+23:08:22.669620 memdb@flush N·9 S·540B
+23:08:22.705622 memdb@flush created L0@35 N·9 S·345B "lkeys:,d86":"red..rID,v84"
+23:08:22.705622 version@stat F·[3 1] S·1KiB[889B 979B] Sc·[0.75 0.00]
+23:08:22.729623 memdb@flush committed F·1 T·60.0035ms
+23:08:22.729623 journal@remove removed @31
+23:08:22.764625 transaction@flush created L0@36 N·7 S·295B "red..ion,v97":"red..sku,v96"
+23:08:22.764625 version@stat F·[4 1] S·2KiB[1KiB 979B] Sc·[1.00 0.00]
+23:08:22.787627 table@compaction L0·4 -> L1·1 S·2KiB Q·97
+23:08:22.813628 table@build created L1@37 N·80 S·1KiB "lke../id,v46":"red..rID,v84"
+23:08:22.814628 version@stat F·[0 1] S·1KiB[0B 1KiB] Sc·[0.00 0.00]
+23:08:22.849630 table@compaction committed F-4 S-927B Ke·0 D·6 T·61.0035ms
+23:08:22.849630 table@remove removed @36
+23:08:22.849630 table@remove removed @35
+23:08:22.849630 table@remove removed @33
+23:08:22.849630 table@remove removed @32
+23:08:22.849630 table@remove removed @30
+23:08:22.872631 transaction@flush created L0@38 N·4 S·232B "red..ail,v101":"red..ame,v99"
+23:08:22.872631 version@stat F·[1 1] S·1KiB[232B 1KiB] Sc·[0.25 0.00]
+23:08:53.092360 memdb@flush N·11 S·670B
+23:08:53.115361 memdb@flush created L0@40 N·11 S·392B "lke../id,v110":"red..d.3,v108"
+23:08:53.116361 version@stat F·[2 1] S·1KiB[624B 1KiB] Sc·[0.50 0.00]
+23:08:53.139363 memdb@flush committed F·1 T·47.0027ms
+23:08:53.213367 journal@remove removed @34
+23:08:53.232368 transaction@flush created L0@41 N·1 S·163B "red..oID,v113":"red..oID,v113"
+23:08:53.232368 version@stat F·[3 1] S·1KiB[787B 1KiB] Sc·[0.75 0.00]
+=============== Oct 15, 2018 (-03) ===============
+16:57:38.849476 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+16:57:38.863477 version@stat F·[3 1] S·1KiB[787B 1KiB] Sc·[0.75 0.00]
+16:57:38.863477 db@open opening
+16:57:38.863477 journal@recovery F·1
+16:57:38.925678 journal@recovery recovering @39
+16:57:38.971879 memdb@flush created L0@42 N·9 S·342B "lkeys:,d118":"red..rID,v116"
+16:57:38.971879 version@stat F·[4 1] S·2KiB[1KiB 1KiB] Sc·[1.00 0.00]
+16:57:39.065880 db@janitor F·7 G·0
+16:57:39.065880 db@open done T·202.4038ms
+16:57:39.126082 table@compaction L0·4 -> L1·1 S·2KiB Q·123
+16:57:39.210686 table@build created L1@45 N·99 S·1KiB "lke../id,v110":"red..rID,v84"
+16:57:39.210686 version@stat F·[0 1] S·1KiB[0B 1KiB] Sc·[0.00 0.00]
+16:57:39.260486 table@compaction committed F-4 S-876B Ke·0 D·6 T·134.4042ms
+16:57:39.260486 table@remove removed @42
+16:57:39.260486 table@remove removed @41
+16:57:39.260486 table@remove removed @40
+16:57:39.260486 table@remove removed @38
+16:57:39.260486 table@remove removed @37
+16:57:52.770892 transaction@flush created L0@46 N·7 S·297B "red..ion,v130":"red..sku,v129"
+16:57:52.770892 version@stat F·[1 1] S·1KiB[297B 1KiB] Sc·[0.25 0.00]
+16:57:53.001905 transaction@flush created L0@47 N·4 S·232B "red..ail,v134":"red..ame,v132"
+16:57:53.001905 version@stat F·[2 1] S·1KiB[529B 1KiB] Sc·[0.50 0.00]
+16:59:25.421306 memdb@flush N·11 S·605B
+16:59:25.460308 memdb@flush created L0@49 N·11 S·335B "lkeys:,d143":"red..d.3,v141"
+16:59:25.460308 version@stat F·[3 1] S·2KiB[864B 1KiB] Sc·[0.75 0.00]
+16:59:25.477309 memdb@flush committed F·1 T·56.0033ms
+16:59:25.477309 journal@remove removed @43
+16:59:25.505311 transaction@flush created L0@50 N·7 S·295B "red..ion,v146":"red..sku,v152"
+16:59:25.505311 version@stat F·[4 1] S·2KiB[1KiB 1KiB] Sc·[1.00 0.00]
+16:59:25.532312 table@compaction expanding L0+L1 (F·1 S·295B)+(F·1 S·1KiB) -> (F·4 S·1KiB)+(F·1 S·1KiB)
+16:59:25.532312 table@compaction L0·4 -> L1·1 S·2KiB Q·152
+16:59:25.550313 table@build created L1@51 N·125 S·1KiB "lke../id,v110":"red..rID,v84"
+16:59:25.550313 version@stat F·[0 1] S·1KiB[0B 1KiB] Sc·[0.00 0.00]
+16:59:25.568314 table@compaction committed F-4 S-889B Ke·0 D·3 T·36.0021ms
+16:59:25.568314 table@remove removed @50
+16:59:25.568314 table@remove removed @49
+16:59:25.569314 table@remove removed @47
+16:59:25.569314 table@remove removed @46
+16:59:25.569314 table@remove removed @45
+16:59:25.640318 transaction@flush created L0@52 N·4 S·232B "red..ail,v155":"red..ame,v153"
+16:59:25.640318 version@stat F·[1 1] S·1KiB[232B 1KiB] Sc·[0.25 0.00]
+16:59:31.048628 memdb@flush N·11 S·670B
+16:59:31.074629 memdb@flush created L0@54 N·11 S·391B "lke../id,v165":"red..d.3,v163"
+16:59:31.074629 version@stat F·[2 1] S·2KiB[623B 1KiB] Sc·[0.50 0.00]
+16:59:31.143633 memdb@flush committed F·1 T·95.0054ms
+16:59:31.144633 journal@remove removed @48
+16:59:31.220637 transaction@flush created L0@55 N·1 S·163B "red..oID,v168":"red..oID,v168"
+16:59:31.220637 version@stat F·[3 1] S·2KiB[786B 1KiB] Sc·[0.75 0.00]
+16:59:46.803529 memdb@flush N·4 S·327B
+16:59:46.843531 memdb@flush created L0@57 N·4 S·300B "red..eys,v169":"red..rID,v171"
+16:59:46.843531 version@stat F·[4 1] S·2KiB[1KiB 1KiB] Sc·[1.00 0.00]
+16:59:46.862532 memdb@flush committed F·1 T·59.0034ms
+16:59:46.863532 journal@remove removed @53
+16:59:46.864532 table@compaction L0·4 -> L1·1 S·2KiB Q·172
+16:59:46.895534 table@build created L1@58 N·144 S·2KiB "lke../id,v165":"red..rID,v84"
+16:59:46.895534 version@stat F·[0 1] S·2KiB[0B 2KiB] Sc·[0.00 0.00]
+16:59:46.936536 transaction@flush created L0@59 N·7 S·294B "red..ion,v173":"red..sku,v179"
+16:59:46.960538 table@compaction committed F-4 S-650B Ke·0 D·1 T·96.0055ms
+16:59:46.961538 table@remove removed @57
+16:59:46.960538 version@stat F·[1 1] S·2KiB[294B 2KiB] Sc·[0.25 0.00]
+16:59:46.961538 table@remove removed @55
+16:59:46.961538 table@remove removed @54
+16:59:46.962538 table@remove removed @52
+16:59:46.962538 table@remove removed @51
+16:59:47.093545 transaction@flush created L0@60 N·5 S·226B "red..key,v183":"red..ame,v182"
+16:59:47.093545 version@stat F·[2 1] S·2KiB[520B 2KiB] Sc·[0.50 0.00]
+=============== Oct 15, 2018 (-03) ===============
+17:26:00.167658 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+17:26:00.168658 version@stat F·[2 1] S·2KiB[520B 2KiB] Sc·[0.50 0.00]
+17:26:00.168658 db@open opening
+17:26:00.168658 journal@recovery F·1
+17:26:00.168658 journal@recovery recovering @56
+17:26:00.195660 memdb@flush created L0@61 N·107 S·1KiB "gda..303,d290":"red..d.1,v189"
+17:26:00.196660 version@stat F·[3 1] S·4KiB[2KiB 2KiB] Sc·[0.75 0.00]
+17:26:00.256862 db@janitor F·6 G·0
+17:26:00.256862 db@open done T·88.2033ms
+17:26:11.069277 transaction@flush created L0@64 N·7 S·297B "red..ion,v294":"red..sku,v293"
+17:26:11.069277 version@stat F·[4 1] S·4KiB[2KiB 2KiB] Sc·[1.00 0.00]
+17:26:11.113279 table@compaction L0·4 -> L1·1 S·4KiB Q·299
+17:26:11.138281 table@build created L1@65 N·222 S·3KiB "gda../AP,v285":"red..ame,v182"
+17:26:11.138281 version@stat F·[0 1] S·3KiB[0B 3KiB] Sc·[0.00 0.00]
+17:26:11.156282 table@compaction committed F-4 S-720B Ke·0 D·48 T·43.0025ms
+17:26:11.156282 table@remove removed @64
+17:26:11.156282 table@remove removed @61
+17:26:11.156282 table@remove removed @60
+17:26:11.156282 table@remove removed @59
+17:26:11.157282 table@remove removed @58
+17:26:11.228286 transaction@flush created L0@66 N·4 S·232B "red..ail,v300":"red..ame,v302"
+17:26:11.228286 version@stat F·[1 1] S·4KiB[232B 3KiB] Sc·[0.25 0.00]
+17:26:23.972015 memdb@flush N·11 S·664B
+17:26:24.016017 memdb@flush created L0@68 N·11 S·379B "lke../id,v312":"red..d.3,v310"
+17:26:24.016017 version@stat F·[2 1] S·4KiB[611B 3KiB] Sc·[0.50 0.00]
+17:26:24.034018 memdb@flush committed F·1 T·62.0035ms
+17:26:24.035018 journal@remove removed @62
+17:26:24.061020 transaction@flush created L0@69 N·1 S·163B "red..oID,v315":"red..oID,v315"
+17:26:24.061020 version@stat F·[3 1] S·4KiB[774B 3KiB] Sc·[0.75 0.00]
+=============== Oct 15, 2018 (-03) ===============
+17:35:15.819400 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+17:35:15.819400 version@stat F·[3 1] S·4KiB[774B 3KiB] Sc·[0.75 0.00]
+17:35:15.820400 db@open opening
+17:35:15.820400 journal@recovery F·1
+17:35:15.820400 journal@recovery recovering @67
+17:35:15.863403 memdb@flush created L0@70 N·9 S·340B "lkeys:,d320":"red..rID,v318"
+17:35:15.864403 version@stat F·[4 1] S·4KiB[1KiB 3KiB] Sc·[1.00 0.00]
+17:35:15.914406 db@janitor F·7 G·0
+17:35:15.914406 db@open done T·94.0054ms
+17:35:15.935407 table@compaction L0·4 -> L1·1 S·4KiB Q·325
+17:35:16.007609 table@build created L1@73 N·241 S·4KiB "gda../AP,v285":"red..ame,v182"
+17:35:16.007609 version@stat F·[0 1] S·4KiB[0B 4KiB] Sc·[0.00 0.00]
+17:35:16.032611 table@compaction committed F-4 S-786B Ke·0 D·6 T·97.2038ms
+17:35:16.032611 table@remove removed @70
+17:35:16.032611 table@remove removed @69
+17:35:16.032611 table@remove removed @68
+17:35:16.032611 table@remove removed @66
+17:35:16.033611 table@remove removed @65
+17:35:25.289579 transaction@flush created L0@74 N·7 S·295B "red..ion,v331":"red..sku,v330"
+17:35:25.289579 version@stat F·[1 1] S·4KiB[295B 4KiB] Sc·[0.25 0.00]
+17:35:25.420587 transaction@flush created L0@75 N·4 S·232B "red..ail,v336":"red..ame,v334"
+17:35:25.420587 version@stat F·[2 1] S·4KiB[527B 4KiB] Sc·[0.50 0.00]
+17:35:29.258806 memdb@flush N·11 S·664B
+17:35:29.290808 memdb@flush created L0@77 N·11 S·382B "lke../id,v345":"red..d.3,v343"
+17:35:29.290808 version@stat F·[3 1] S·5KiB[909B 4KiB] Sc·[0.75 0.00]
+17:35:29.318810 memdb@flush committed F·1 T·60.0034ms
+17:35:29.318810 journal@remove removed @71
+17:35:29.360812 transaction@flush created L0@78 N·1 S·163B "red..oID,v348":"red..oID,v348"
+17:35:29.360812 version@stat F·[4 1] S·5KiB[1KiB 4KiB] Sc·[1.00 0.00]
+17:35:29.385813 table@compaction L0·4 -> L1·1 S·5KiB Q·348
+17:35:29.459818 table@build created L1@79 N·264 S·4KiB "gda../AP,v285":"red..ame,v182"
+17:35:29.459818 version@stat F·[0 1] S·4KiB[0B 4KiB] Sc·[0.00 0.00]
+17:35:29.490819 table@compaction committed F-4 S-764B Ke·0 D·0 T·105.006ms
+17:35:29.490819 table@remove removed @78
+17:35:29.490819 table@remove removed @77
+17:35:29.490819 table@remove removed @75
+17:35:29.490819 table@remove removed @74
+17:35:29.491819 table@remove removed @73
+=============== Oct 15, 2018 (-03) ===============
+17:41:21.554212 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+17:41:21.555212 version@stat F·[0 1] S·4KiB[0B 4KiB] Sc·[0.00 0.00]
+17:41:21.555212 db@open opening
+17:41:21.555212 journal@recovery F·1
+17:41:21.556212 journal@recovery recovering @76
+17:41:21.592215 memdb@flush created L0@80 N·9 S·338B "lkeys:,d353":"red..rID,v351"
+17:41:21.592215 version@stat F·[1 1] S·4KiB[338B 4KiB] Sc·[0.25 0.00]
+17:41:21.654218 db@janitor F·4 G·0
+17:41:21.654218 db@open done T·99.0057ms
+17:41:31.273617 transaction@flush created L0@83 N·7 S·295B "red..ion,v359":"red..sku,v365"
+17:41:31.273617 version@stat F·[2 1] S·5KiB[633B 4KiB] Sc·[0.50 0.00]
+17:41:31.415625 transaction@flush created L0@84 N·4 S·232B "red..ail,v369":"red..ame,v367"
+17:41:31.416625 version@stat F·[3 1] S·5KiB[865B 4KiB] Sc·[0.75 0.00]
+17:41:40.230129 memdb@flush N·11 S·670B
+17:41:40.264131 memdb@flush created L0@86 N·11 S·390B "lke../id,v370":"red..d.3,v376"
+17:41:40.264131 version@stat F·[4 1] S·5KiB[1KiB 4KiB] Sc·[1.00 0.00]
+17:41:40.325135 memdb@flush committed F·1 T·95.0055ms
+17:41:40.325135 journal@remove removed @81
+17:41:40.331135 table@compaction L0·4 -> L1·1 S·5KiB Q·380
+17:41:40.388138 transaction@flush created L0@87 N·1 S·163B "red..oID,v381":"red..oID,v381"
+17:41:40.389138 version@stat F·[5 1] S·5KiB[1KiB 4KiB] Sc·[1.25 0.00]
+17:41:40.471143 table@build created L1@88 N·289 S·4KiB "gda../AP,v285":"red..ame,v182"
+17:41:40.471143 version@stat F·[1 1] S·5KiB[163B 4KiB] Sc·[0.25 0.00]
+17:41:40.541147 table@compaction committed F-4 S-741B Ke·0 D·6 T·210.012ms
+17:41:40.541147 table@remove removed @86
+17:41:40.541147 table@remove removed @84
+17:41:40.542147 table@remove removed @83
+17:41:40.542147 table@remove removed @80
+17:41:40.542147 table@remove removed @79
+17:43:00.896743 memdb@flush N·4 S·327B
+17:43:00.930745 memdb@flush created L0@90 N·4 S·300B "red..eys,v382":"red..rID,v384"
+17:43:00.930745 version@stat F·[2 1] S·5KiB[463B 4KiB] Sc·[0.50 0.00]
+17:43:00.954746 memdb@flush committed F·1 T·58.0033ms
+17:43:00.954746 journal@remove removed @85
+17:43:00.977748 transaction@flush created L0@91 N·7 S·295B "red..ion,v390":"red..sku,v389"
+17:43:00.977748 version@stat F·[3 1] S·5KiB[758B 4KiB] Sc·[0.75 0.00]
+17:43:01.130756 transaction@flush created L0@92 N·4 S·232B "red..ail,v396":"red..ame,v394"
+17:43:01.130756 version@stat F·[4 1] S·5KiB[990B 4KiB] Sc·[1.00 0.00]
+17:43:01.167759 table@compaction expanding L0+L1 (F·3 S·827B)+(F·1 S·4KiB) -> (F·4 S·990B)+(F·1 S·4KiB)
+17:43:01.167759 table@compaction L0·4 -> L1·1 S·5KiB Q·396
+17:43:01.204761 table@build created L1@93 N·304 S·5KiB "gda../AP,v285":"red..ame,v182"
+17:43:01.204761 version@stat F·[0 1] S·5KiB[0B 5KiB] Sc·[0.00 0.00]
+17:43:01.225762 table@compaction committed F-4 S-557B Ke·0 D·1 T·58.0033ms
+17:43:01.226762 table@remove removed @92
+17:43:01.226762 table@remove removed @91
+17:43:01.226762 table@remove removed @90
+17:43:01.226762 table@remove removed @87
+17:43:01.226762 table@remove removed @88
+17:43:05.298995 memdb@flush N·9 S·554B
+17:43:05.333997 memdb@flush created L0@95 N·9 S·371B "lke../id,v403":"red..d.1,v401"
+17:43:05.333997 version@stat F·[1 1] S·5KiB[371B 5KiB] Sc·[0.25 0.00]
+17:43:05.362999 memdb@flush committed F·1 T·64.0037ms
+17:43:05.362999 journal@remove removed @89
+17:43:05.392000 transaction@flush created L0@96 N·1 S·163B "red..oID,v406":"red..oID,v406"
+17:43:05.392000 version@stat F·[2 1] S·5KiB[534B 5KiB] Sc·[0.50 0.00]
+17:43:45.347285 memdb@flush N·4 S·326B
+17:43:45.381287 memdb@flush created L0@98 N·4 S·299B "red..eys,v407":"red..rID,v409"
+17:43:45.381287 version@stat F·[3 1] S·6KiB[833B 5KiB] Sc·[0.75 0.00]
+17:43:45.406289 memdb@flush committed F·1 T·59.0034ms
+17:43:45.440291 journal@remove removed @94
+17:43:45.465292 transaction@flush created L0@99 N·7 S·294B "red..ion,v416":"red..sku,v415"
+17:43:45.465292 version@stat F·[4 1] S·6KiB[1KiB 5KiB] Sc·[1.00 0.00]
+17:43:45.500294 table@move L0@99 -> L1
+17:43:45.500294 version@stat F·[3 2] S·6KiB[833B 5KiB] Sc·[0.75 0.00]
+17:43:45.547297 transaction@flush created L0@100 N·5 S·226B "red..key,v422":"red..ame,v421"
+17:43:45.547297 version@stat F·[4 2] S·6KiB[1KiB 5KiB] Sc·[1.00 0.00]
+17:43:45.577299 table@compaction L0·1 -> L1·1 S·520B Q·425
+17:43:45.601300 table@build created L1@101 N·12 S·370B "red..ion,v416":"red..ame,v421"
+17:43:45.601300 version@stat F·[3 2] S·6KiB[833B 5KiB] Sc·[0.75 0.00]
+17:43:45.629302 table@compaction committed F-1 S-150B Ke·0 D·0 T·52.003ms
+17:43:45.629302 table@remove removed @100
+17:43:45.629302 table@remove removed @99

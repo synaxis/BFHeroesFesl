@@ -116,6 +116,14 @@
 
 [[projects]]
   branch = "master"
+  digest = "1:6a2977a1b9a127291525c15aed838907f75be58bcfac4ea2f37bf3e41b59e3c1"
+  name = "github.com/t-tomalak/logrus-easy-formatter"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "ca9ce6b071ebe774296872e9dff2009b87ddcbb0"
+
+[[projects]]
+  branch = "master"
   digest = "1:3f3a05ae0b95893d90b9b3b5afdb79a9b3d96e4e36e099d841ae602e4aca0da8"
   name = "golang.org/x/crypto"
   packages = ["ssh/terminal"]
@@ -157,6 +165,7 @@
     "github.com/subosito/gotenv",
     "github.com/syndtr/goleveldb/leveldb",
     "github.com/syndtr/goleveldb/leveldb/util",
+    "github.com/t-tomalak/logrus-easy-formatter",
   ]
   solver-name = "gps-cdcl"
   solver-version = 1

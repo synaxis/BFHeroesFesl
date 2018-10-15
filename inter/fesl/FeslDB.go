@@ -57,6 +57,8 @@ func MysqlRealEscapeString(value string) string {
 	return value
 }
 
+
+//THIS IS USED FOR WEBSITE SERVER BOOKMARKS
 // func (d *Database) getBookmark(statsAmount int) *sql.Stmt {
 // 	var err error
 
