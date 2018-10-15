@@ -11,17 +11,11 @@ import (
 )
 
 type reqUSER struct {
-	// TID=2
 	TID string `fesl:"TID"`
-	// LKEY=3c63a203-80d5-462a-9112-414345d40376
 	LobbyKey string `fesl:"LKEY"`
-	// CID=
 	ClientID string `fesl:"CID"`
-	// MAC=$0a0027000000
 	MACAddr string `fesl:"MAC"`
-	// SKU=125170
 	SKU string `fesl:"SKU"`
-	// NAME=
 	NAME string `fesl:"NAME"`
 }
 
@@ -53,7 +47,7 @@ func (tm *Theater) USER(event network.EvProcess) {
 	redisState.Set("name", lkeyRedis.Get("name"))
 
 	event.Client.Answer(&codec.Packet{
-		Message: thtrUSER,
+		Message: "USER",
 		Content: answerUSER{
 			ClientID: event.Process.Msg["CID"],
 			TID:      event.Process.Msg["TID"],

@@ -11,28 +11,7 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-const (
-	thtrCGAM = "CGAM"
-	thtrCONN = "CONN"
-	thtrECHO = "ECHO"
-	thtrEGAM = "EGAM"
-	thtrEGEG = "EGEG"
-	thtrEGRQ = "EGRQ"
-	thtrEGRS = "EGRS"
-	thtrECNL = "ECNL"
-	thtrGDAT = "GDAT"
-	thtrKICK = "KICK"
-	thtrLDAT = "LDAT"
-	thtrLLST = "LLST"
-	thtrPENT = "PENT"
-	thtrPING = "PING"
-	thtrPLVT = "PLVT"
-	thtrUBRA = "UBRA"
-	thtrUPLA = "UPLA"
-	thtrUSER = "USER"
-)
-
-// Theater Handles incoming and outgoing theater communication
+// Handles incoming/outgoing communication from client and gServer
 type Theater struct {
 	name      string
 	socket    *network.Socket

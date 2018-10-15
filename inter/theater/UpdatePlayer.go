@@ -9,16 +9,11 @@ import (
 )
 
 type reqUPLA struct {
-	// TID=12
 	TID int `fesl:"TID"`
-	// GID=3
 	GameID int `fesl:"GID"`
-	// LID=1
 	LobbyID string `fesl:"LID"`
-	// PID=6
 	PlayerID int `fesl:"PID"`
 	clientID int `fesl:"P-cid"`
-
 	HostOwnerID int `fesl:"HMO"`
 }
 
@@ -27,11 +22,9 @@ type reqUPLAKeys struct {
 	PlayerKills *string `fesl:"P-kills"`
 	PlayerKit   *string `fesl:"P-kit"`
 	PlayerLevel *string `fesl:"P-level"`
-	// P-ping=24
 	PlayerPing  *int    `fesl:"P-ping"`
 	PlayerScore *string `fesl:"P-score"`
 	PlayerTeam  *string `fesl:"P-team"`
-	// P-time="1 min 10 sec "
 	PlayerPlayedTime *string `fesl:"P-time"`
 	PlayerClientID   *string `fesl:"P-cid"`
 	PlayerDataCenter *string `fesl:"P-dc"`

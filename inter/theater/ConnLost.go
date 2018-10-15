@@ -8,11 +8,8 @@ import (
 )
 
 type reqECNL struct {
-	// TID=8
 	TID int `fesl:"TID"`
-	// GID=3
 	GameID int `fesl:"GID"`
-	// LID=1
 	LobbyID int `fesl:"LID"`
 }
 
@@ -24,12 +21,12 @@ type ansECNL struct {
 
 // ECNL - EnterConnectionLost
 func (tm *Theater) ECNL(event network.EvProcess) {
-	logrus.Println("=============ECNL==============")
+	logrus.Println("======ECNL======")
 	logrus.Println("========SENT Leave Announcement to Player======")
 	logrus.Println("HeroRQ")
 
 	event.Client.Answer(&codec.Packet{
-		Message: thtrECNL,
+		Message: "ECNL",
 		Content: ansECNL{
 			event.Process.Msg["TID"],
 			event.Process.Msg["GID"],

@@ -5,3 +5,6 @@ MakaHost
 Jefalo
 s0ulmaster
 Warp
+the1domo
+Aluigi 
+Uknown cheats forum

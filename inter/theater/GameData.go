@@ -6,15 +6,13 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-
-
 // GameClient Represents a game client connected to theater
 type GameClient struct {
 	ip   string
 	port string
 }
 
-// GameServer Represents a game server and it's data
+// GameServer Data
 type GameServer struct {
 	ip                 string
 	port               string
@@ -51,12 +49,8 @@ type GameServer struct {
 }
 
 type reqGDAT struct {
-	// TID=3
 	TID int `fesl:"TID"`
-
-	// LID=0
 	LobbyID int `fesl:"LID"`
-	// GID=1
 	GameID int `fesl:"GID"`
 }
 
@@ -122,7 +116,7 @@ func (tm *Theater) GDAT(event network.EvProcess) {
 	////////////////////////////////////////////
 
 	event.Client.Answer(&codec.Packet{
-		Message: thtrGDAT,
+		Message: "GDAT",
 		Content: ansGDAT{
 			TID:                  event.Process.Msg["TID"],
 			Ap:                   gameServer.Get("AP"),

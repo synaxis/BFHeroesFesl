@@ -11,7 +11,6 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-// TXN stands for Taxon, sub-query name of the command
 // Fesl - handles incoming and outgoing FESL data
 type Fesl struct {
 	name   string

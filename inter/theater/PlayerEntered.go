@@ -57,7 +57,7 @@ func (tM *Theater) PENT(event network.EvProcess) {
 	}
 
 	event.Client.Answer(&codec.Packet{
-		Message: thtrPENT,
+		Message: "PENT",
 		Content: ansPENT{
 			event.Process.Msg["TID"],
 			event.Process.Msg["PID"],

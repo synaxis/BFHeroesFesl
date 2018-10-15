@@ -35,7 +35,7 @@ func (fm *Fesl) Start(event network.EvProcess) {
 			ID:    "1",
 			Partition: "eagames/bfwest-dedicated",
 		},
-		Send:    0x80000000,
+		Send:    event.Process.HEX,
 		Message: pnow,
 	})
 	fm.Status(event)
@@ -96,7 +96,7 @@ func (fm *Fesl) Status(event network.EvProcess) {
 				"sessionType": "findServer",
 				"games":      gamesArray},
 		},
-		Send:    0x80000000,
+		Send:    event.Process.HEX,
 		Message: pnow,
 	})
 	

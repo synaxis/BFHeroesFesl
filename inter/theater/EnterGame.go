@@ -64,9 +64,9 @@ func (tm *Theater) EGAM(event network.EvProcess) {
 	externalIP := event.Client.IpAddr.(*net.TCPAddr).IP.String()
 	lobbyID := event.Process.Msg["LID"]
 	pid := event.Client.HashState.Get("id") //playerID
-	logrus.Println("======SENT EGAM=======")
+	logrus.Println("===SENT EGAM===")
 	event.Client.Answer(&codec.Packet{
-		Message: thtrEGAM,
+		Message: "EGAM",
 		Content: ansEGAM{event.Process.Msg["TID"], lobbyID, gameID},
 	})
 
@@ -125,15 +125,13 @@ func (tm *Theater) EGAM(event network.EvProcess) {
 		stats[statsKey] = statsValue
 	}
 
-	//@todo something like this
-	//while(isSearching = true)
 	if gameServer, ok := mm.Games[gameID]; ok {
 		gsData := tm.level.NewObject("gdata", gameID)
 
 		//GAME SERVER Enter Game Request
-		logrus.Println("=====================EGRQ================")
+		logrus.Println("=====EGRQ======")
 		gameServer.Answer(&codec.Packet{
-			Message: thtrEGRQ,
+			Message: "EGRQ",
 			Content: ansEGRQ{
 				TID:          event.Process.Msg["TID"],
 				Name:         stats["heroName"],
@@ -166,9 +164,9 @@ func (tm *Theater) EGAM(event network.EvProcess) {
 			},
 		})
 
-		// Game Client Client
+		// Game Client
 		event.Client.Answer(&codec.Packet{
-			Message: thtrEGEG,
+			Message: "EGEG",
 			Content: ansEGEG{
 				TID:      event.Process.Msg["TID"],
 				IP:       gsData.Get("IP"),
@@ -186,6 +184,6 @@ func (tm *Theater) EGAM(event network.EvProcess) {
 				GameID:   gameID,
 			},
 		})
-		logrus.Println("===========EGEG=========")
+		logrus.Println("=====EGEG=======")
 	}
 }

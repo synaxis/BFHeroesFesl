@@ -22,7 +22,7 @@ func (tm *Theater) ECHO(event network.SocketUDPEvent) {
 	ECHO := Process.Msg
 
 	tm.socketUDP.Answer(&codec.Packet{
-		Message: thtrECHO,
+		Message: "ECHO",
 		Content: ansECHO{
 			TID:   ECHO["TID"],
 			UGID:  ECHO["UGID"],

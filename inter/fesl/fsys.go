@@ -55,12 +55,7 @@ func (fm *Fesl) hello(event network.EvProcess) {
 	if !Active {
 		logrus.Println("Cli Left")
 		return
-	}
-
-	var firstLogin = true
-	if !firstLogin {
-		fm.NuLogin(event)
-	}
+	}	
 
 	redisState := fm.createState(fmt.Sprintf(
 		"%s-%s",
@@ -106,7 +101,6 @@ func (fm *Fesl) hello(event network.EvProcess) {
 		Message: fsys,
 		Send:    0xC0000001,
 	})
-	firstLogin = true
 	if !Active {
 		fm.Goodbye(event)
 		return

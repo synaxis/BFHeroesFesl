@@ -15,7 +15,7 @@ type ansPING struct {
 
 func (tm *Theater) PING(event *network.EventNewClient) {
 	event.Client.Answer(&codec.Packet{		
-		Message: thtrPING,
+		Message: "PING",
 		Content: ansPING{"0"},
 	})
 }

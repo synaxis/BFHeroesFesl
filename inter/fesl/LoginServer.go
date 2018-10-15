@@ -26,7 +26,7 @@ func (fm *Fesl) NuLoginServer(event network.EvProcess) {
 		&userID, &servername, &secretKey, &username)
 
 	if err != nil {
-		logrus.Println("===NuLogin issue/wrong data!==")
+		logrus.Println("===NuLogin issue=")
 		return
 	}
 
@@ -38,9 +38,7 @@ func (fm *Fesl) NuLoginServer(event network.EvProcess) {
 	saveRedis["keyHash"] = event.Process.Msg["password"]
 	event.Client.HashState.SetM(saveRedis)
 
-		//TODO create a function
-	// Setup a new key for our persona
-	
+	//Setup new key for our persona	
 	tempKey, err := randomize()
 	lkeyRedis := fm.level.NewObject("lkeys", tempKey)
 	lkeyRedis.Set("id", id)
@@ -67,7 +65,7 @@ func (fm *Fesl) NuLoginServer(event network.EvProcess) {
 }
 
 //NuLoginPersonaServer The Login is based on the Name
-//there is only 1 persona(hero) for the server , so it works like a password
+//there's only 1 persona(hero) for the server, so it works like a password
 func (fm *Fesl) NuLoginPersonaServer(event network.EvProcess) {
 	ready := event.Client.IsActive
 	if !ready {
@@ -76,11 +74,11 @@ func (fm *Fesl) NuLoginPersonaServer(event network.EvProcess) {
 	}
 
 	logrus.Println("===LoginPersonaServer===")
-	logrus.Println("==Prompt==")
-	/////////////Checks////////////////////
+	/////Checks///////
 
 	if event.Client.HashState.Get("clientType") != "server" {
-		logrus.Println("====Possible Exploit====")
+		logrus.Println("===Possible Exploit===")
+		fm.Goodbye(event)
 		return
 	}
 
@@ -89,19 +87,12 @@ func (fm *Fesl) NuLoginPersonaServer(event network.EvProcess) {
 		&userID, &servername, &secretKey, &username)
 
 	if event.Client.HashState.Get("clientType") != "server" || err != nil {
-		logrus.Println("======Possible Exploit======")
-		//fm.Close()
+		logrus.Println("===Possible Exploit===")
+		fm.Goodbye(event)
 		return
 	}
 
-	if !ready {
-		logrus.Println("AFK")
-		return
-	}
-	// Setup a key for Server
-    //TODO create a function  --> DONE 
-	// Setup a new key for our persona
-	
+	// Setup a new key for our persona	
 	tempKey, err := randomize()
 	lkeyRedis := fm.level.NewObject("lkeys", tempKey)
 	lkeyRedis.Set("id", userID)
@@ -115,11 +106,10 @@ func (fm *Fesl) NuLoginPersonaServer(event network.EvProcess) {
 			ProfileID: id,
 			UserID:    id,
 			Lkey:      tempKey,
-			//nuid:    servername @TODO
 		},
 		Send:    event.Process.HEX,
 		Message: acct,
 	})
 
-	logrus.Println("=====Success Login=====")
+	logrus.Println("=== Server  Login OK===")
 }

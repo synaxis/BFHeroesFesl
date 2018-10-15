@@ -42,21 +42,11 @@ type ansEGRQ struct {
 }
 
 type reqEGRS struct {
-	// TID=6
 	TID int `fesl:"TID"`
-
-	// LID=1
 	LobbyID int `fesl:"LID"`
-	// GID=12
 	GameID int `fesl:"GID"`
-	// ALLOWED=1
-	// ALLOWED=0
 	Allow int `fesl:"ALLOWED"`
-	// PID=3
 	PlayerID int `fesl:"PID"`
-
-	// Reason is only sent when ALLOWED=0 and there is some kind of error
-	// REASON=-602
 	Reason string `fesl:"REASON,omitempty"`
 }
 
@@ -73,13 +63,11 @@ func (tm *Theater) EGRS(event network.EvProcess) {
 	if event.Process.Msg["ALLOWED"] != "1" {
 	}
 
-
-
 	logrus.Println("======EGRS=====")
 	tm.db.stmtGameIncreaseJoining.Exec(event.Process.Msg["GID"])
 
 	event.Client.Answer(&codec.Packet{
-		Message: thtrEGRS,
+		Message: "EGRS",
 		Content: ansEGRS{
 			TID:   event.Process.Msg["TID"],
 			PID:   event.Process.Msg["PID"],

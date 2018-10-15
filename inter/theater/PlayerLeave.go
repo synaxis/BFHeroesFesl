@@ -8,14 +8,9 @@ import (
 )
 
 type reqPLVT struct {
-	// TID=16
 	TID int `fesl:"TID"`
-
-	// LID=1
 	LobbyID int `fesl:"LID"`
-	// GID=12
 	GameID int `fesl:"GID"`
-	// PID=3
 	PlayerID int `fesl:"PID"`
 }
 
@@ -67,7 +62,7 @@ func (tM *Theater) PLVT(event network.EvProcess) {
 	}
 
 	event.Client.Answer(&codec.Packet{ // need to check this
-		Message: thtrPLVT,
+		Message: "PLVT",
 		Content: ansPLVT{
 			event.Process.Msg["TID"],
 			event.Process.Msg["PID"],
@@ -75,11 +70,11 @@ func (tM *Theater) PLVT(event network.EvProcess) {
 	})
 
 	event.Client.Answer(&codec.Packet{ // need to check this
-		Message: thtrKICK,
+		Message: "KICK",
 		Content: ansKICK{
 			event.Process.Msg["PID"],
 			event.Process.Msg["LID"],
-			event.Process.Msg["GID"],
+			event.Process.Msg["TID"],
 		},
 	})
 

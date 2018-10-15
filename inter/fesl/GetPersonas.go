@@ -61,6 +61,11 @@ func (fm *Fesl) NuGetPersonas(event network.EvProcess) {
 // GetPersonasServer G_Server Login retrieves Info Based on +soldierName(should be more secure)
 func (fm *Fesl) NuGetPersonasServer(event network.EvProcess) {
 	logrus.Println("==SERVER CONNECT Prompt==")
+	if event.Client.HashState.Get("clientType") == "client" {
+		fm.NuGetPersonas(event)
+		return
+	}
+	
 	//////Validates Login///////////
 	AFK := !event.Client.IsActive
 	if AFK {
@@ -68,12 +73,7 @@ func (fm *Fesl) NuGetPersonasServer(event network.EvProcess) {
 		fm.Goodbye(event)
 		return
 	}
-	if event.Client.HashState.Get("clientType") != "server" {
-		//Exploit Login
-		logrus.Println("==Wrong  Server Login==")
-		fm.Goodbye(event) //send goodbye
-		return
-	}
+	
 
 	var id, userID, servername, secretKey, username string
 	err := fm.db.stmtGetServerByName.QueryRow(event.Process.Msg["name"]).Scan(&id, //continue
