@@ -60,39 +60,40 @@ func (fm *Fesl) NuGetPersonas(event network.EvProcess) {
 
 // GetPersonasServer G_Server Login retrieves Info Based on +soldierName(should be more secure)
 func (fm *Fesl) NuGetPersonasServer(event network.EvProcess) {
-	logrus.Println("======SERVER CONNECT Prompt=====")
+	logrus.Println("==SERVER CONNECT Prompt==")
 	//////Validates Login///////////
 	AFK := !event.Client.IsActive
 	if AFK {
-		logrus.Println("Client Left")
+		logrus.Println("AFK")
+		fm.Goodbye(event)
 		return
 	}
 	if event.Client.HashState.Get("clientType") != "server" {
 		//Exploit Login
-		logrus.Println("====Wrong Server Login====")
+		logrus.Println("==Wrong  Server Login==")
+		fm.Goodbye(event) //send goodbye
 		return
 	}
 
 	var id, userID, servername, secretKey, username string
-
 	err := fm.db.stmtGetServerByName.QueryRow(event.Process.Msg["name"]).Scan(&id, //continue
 		&userID, &servername, &secretKey, &username)
 
-	// Server login
+	// Query Server login
 	rows, err := fm.db.stmtGetServerByID.Query(event.Client.HashState.Get("uID"))
 	if err != nil {
 		return
 	}
 
-	//////Validates Login//////////////////////
-
+	//Validates Login
 	ans := ansNuGetPersonas{TXN: acctNuGetPersonas, Personas: []string{}}
 
 	for rows.Next() {
 		var id, userID, servername, secretKey, username string
 		err := rows.Scan(&id, &userID, &servername, &secretKey, &username)
 		if err != nil {
-			logrus.Println("====Wrong Server Login====")
+			logrus.Println("==Wrong  Server Login==")
+			fm.Goodbye(event) //send goodbye
 			return
 		}
 
@@ -100,8 +101,7 @@ func (fm *Fesl) NuGetPersonasServer(event network.EvProcess) {
 		event.Client.HashState.Set("ownerId."+strconv.Itoa(len(ans.Personas)), id)
 	}
 
-	logrus.Println("====SERVER Login===")
-
+	logrus.Println("=SERVER  Login=")
 	event.Client.Answer(&codec.Packet{
 		Send:    event.Process.HEX,
 		Message: acct,

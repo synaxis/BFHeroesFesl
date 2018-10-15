@@ -134,7 +134,7 @@ func (fm *Fesl) NuLoginPersona(event network.EvProcess) {
 			Encrypt:   1,
 			Lkey:      tempKey,
 		},
-		Send:    event.Process.HEX,
+		Send:    0x80000000,
 		Message: acct,
 	})
 }

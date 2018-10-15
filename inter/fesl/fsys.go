@@ -51,8 +51,8 @@ type domainPartition struct {
 }
 
 func (fm *Fesl) hello(event network.EvProcess) {
-	AFK := event.Client.IsActive
-	if !AFK {
+	Active := event.Client.IsActive
+	if !Active {
 		logrus.Println("Cli Left")
 		return
 	}
@@ -107,7 +107,7 @@ func (fm *Fesl) hello(event network.EvProcess) {
 		Send:    0xC0000001,
 	})
 	firstLogin = true
-	if !AFK {
+	if !Active {
 		fm.Goodbye(event)
 		return
 	}
@@ -149,8 +149,7 @@ func (fm *Fesl) Goodbye(event network.EvProcess) {
 			Reason:     "GOODBYE_CLIENT_NORMAL",
 			messageArr: "n/a",
 		},
-	},
-	)
+	})
 }
 
 /////////////////////////////////////

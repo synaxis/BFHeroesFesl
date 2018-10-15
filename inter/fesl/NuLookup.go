@@ -72,6 +72,11 @@ func (fm *Fesl) NuLookupUserInfo(event network.EvProcess) {
 func (fm *Fesl) NuLookupUserInfoServer(event network.EvProcess) {
 	var err error
 
+	if event.Client.HashState.Get("clientType") == "client" {
+		fm.NuLookupUserInfo(event)
+		return
+	}
+
 	var id, userID, servername, secret, username string
 	//remember the .bat file is our login
 	err = fm.db.stmtGetServerByID.QueryRow(event.Client.HashState.Get("sID")).Scan(&id, &userID, //br

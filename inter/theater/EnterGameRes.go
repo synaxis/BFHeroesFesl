@@ -73,8 +73,7 @@ func (tm *Theater) EGRS(event network.EvProcess) {
 	if event.Process.Msg["ALLOWED"] != "1" {
 	}
 
-	if event.Process.Msg["ALLOWED"] == "1" {
-	}
+
 
 	logrus.Println("======EGRS=====")
 	tm.db.stmtGameIncreaseJoining.Exec(event.Process.Msg["GID"])

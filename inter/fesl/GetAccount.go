@@ -54,3 +54,25 @@ func (fm *Fesl) acctNuGetAccount(event *network.EvProcess) {
 		Send: event.Process.HEX,
 	})
 }
+
+type ansGetTelemetryToken struct {
+	Taxon          string `fesl:"TXN"`
+	TelemetryToken string `fesl:"telemetryToken"`
+	Enabled        bool   `fesl:"enabled"`
+	Disabled       bool   `fesl:"disabled"`
+}
+
+// GetTelemetryToken Only used in 2k9 client
+func (fm *Fesl) Telemetry(event network.EvProcess) {
+	event.Client.Answer(&codec.Packet{
+		Content: ansGetTelemetryToken{
+			Taxon:          "GetTelemetryToken",
+			TelemetryToken: `"teleToken"`,
+			Enabled:        false,
+		},
+
+		Send:    event.Process.HEX,
+		Message: acct,
+	})
+}
+
