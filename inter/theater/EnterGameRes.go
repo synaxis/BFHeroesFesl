@@ -47,7 +47,7 @@ type reqEGRS struct {
 	GameID int `fesl:"GID"`
 	Allow int `fesl:"ALLOWED"`
 	PlayerID int `fesl:"PID"`
-	Reason string `fesl:"REASON,omitempty"`
+	//Reason string `fesl:"REASON,omitempty"`
 }
 
 type ansEGRS struct {
@@ -60,8 +60,6 @@ type ansEGRS struct {
 // EGRS - Enter Game Host Response
 func (tm *Theater) EGRS(event network.EvProcess) {
 
-	if event.Process.Msg["ALLOWED"] != "1" {
-	}
 
 	logrus.Println("======EGRS=====")
 	tm.db.stmtGameIncreaseJoining.Exec(event.Process.Msg["GID"])

@@ -114,7 +114,8 @@ func (tm *Theater) newClient(event network.EventNewClient) {
 	logrus.Println("Joined Theather")
 
 	// Start Heartbeat
-	event.Client.State.HeartTicker = time.NewTicker(time.Second * 10)
+	//event.Client.State.HeartTicker = time.NewTicker(time.Second * 10)
+	event.Client.State.HeartTicker = time.NewTicker(time.Second * 20) //increased for LAN
 	go func() {
 		for event.Client.IsActive {
 			select {

@@ -33,10 +33,10 @@ func (tm *Theater) CONN(event network.EvProcess) {
 	event.Client.Answer(&codec.Packet{
 		Message: "CONN",
 		Content: ansCONN{
-			//sendPacket->SetVar("ATIME", "NuLoginPersona");
 			TID:         event.Process.Msg["TID"],
 			TIME: time.Now().UTC().Unix(),
-			ConnTTL:     3600,
+			//ConnTTL:     3600,
+			ConnTTL:     7200, //used for LAN
 			Protocol:    event.Process.Msg["PROT"],
 		},
 	})

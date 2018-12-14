@@ -17,7 +17,6 @@ type Fesl struct {
 	db     *Database
 	level  *level.Level
 	socket *network.Socket
-
 	server bool
 }
 
@@ -105,7 +104,7 @@ func (fm *Fesl) newClient(event network.EventNewClient) {
 
 	logrus.Println("Client Connecting")
 	// Start Heartbeat
-	event.Client.State.HeartTicker = time.NewTicker(time.Second * 10)
+	event.Client.State.HeartTicker = time.NewTicker(time.Second * 20) //TEST FOR LAN (original 10)
 	go func() {
 		for {
 			if !event.Client.IsActive {

@@ -38,7 +38,7 @@ func (fm *Fesl) GetStats(event network.EvProcess) {
 	userId := event.Client.HashState.Get("uID") //ultra typo
 
 		if event.Client.HashState.Get("clientType") == "server" {
-			logrus.Println("GetStats (server), replacing heroID with ownerID")
+			logrus.Println("GetStats (server)")
 			var id, userID, heroName, online string
 			err := fm.db.stmtGetHeroByID.QueryRow(owner).Scan(&id, &userID, &heroName, &online)
 			if err != nil {
@@ -47,7 +47,6 @@ func (fm *Fesl) GetStats(event network.EvProcess) {
 			}
 
 			userId = userID // should be userID = serverID (suID)
-			//logrus.Println("Server requesting stats")
 
 		}
 

@@ -36,6 +36,7 @@ func main() {
 
 	logrus.Println(" Fesl    Online")
 	logrus.Println(" Theater Online")
+	logrus.Println(" Magma HTTP Online")
 
 	a := make(chan bool)
 	<-a
@@ -56,7 +57,7 @@ func initLogger() {
         Level: logrus.DebugLevel,
 		Formatter: &logrus.TextFormatter{
             DisableColors: true,
-            TimestampFormat : "01-02 15:04:05",
+            TimestampFormat : "01-02 15:04",
             FullTimestamp:false,
         },
 	}

@@ -23,15 +23,15 @@ var firstLogin = true
 // reqHello is definition of the fsys.Hello request call
 type reqHello struct {
 	TXN             string `fesl:"TXN"`
-	ClientString    string `fesl:"clientString"`
+	clientString    string `fesl:"clientString"`
 	Sku             int    `fesl:"sku"`
 	Locale          string `fesl:"locale"`
-	ClientPlatform  string `fesl:"clientPlatform"`
-	ClientVersion   string `fesl:"clientVersion"`
-	SdkVersion      string `fesl:"SDKVersion"`
-	ProtocolVersion string `fesl:"protocolVersion"`
-	FragmentSize    int    `fesl:"fragmentSize"`
-	ClientType      string `fesl:"clientType"`
+	clientPlatform  string `fesl:"clientPlatform"`
+	clientVersion   string `fesl:"clientVersion"`
+	sdkVersion      string `fesl:"SDKVersion"`
+	protocolVersion string `fesl:"protocolVersion"`
+	fragmentSize    int    `fesl:"fragmentSize"`
+	clientType      string `fesl:"clientType"`
 }
 
 type ansHello struct {
@@ -146,7 +146,7 @@ func (fm *Fesl) Goodbye(event network.EvProcess) {
 	})
 }
 
-/////////////////////////////////////
+///////////////////////////////
 type ansGetPingSites struct {
 	TXN       string     `fesl:"TXN"`
 	MinPings  int        `fesl:"minPingSitesToPing"`

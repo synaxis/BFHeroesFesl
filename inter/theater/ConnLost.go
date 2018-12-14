@@ -23,7 +23,6 @@ type ansECNL struct {
 func (tm *Theater) ECNL(event network.EvProcess) {
 	logrus.Println("======ECNL======")
 	logrus.Println("========SENT Leave Announcement to Player======")
-	logrus.Println("HeroRQ")
 
 	event.Client.Answer(&codec.Packet{
 		Message: "ECNL",
