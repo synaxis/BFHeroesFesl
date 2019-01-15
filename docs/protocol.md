@@ -84,17 +84,12 @@ This is the first Pkt that is sent when a FESL connection is made.
 This message is sent every 10 seconds, and acts a heartbeat. 
 If either stops receiving the MemCheck messages, connection loss is assumed.
 
-|Key                       |Example value              |Note                           |
-|--------------------------|---------------------------|-------------------------------|
-|memcheck.[]               |0  (guessed response)      |                               |
-|salt                      |5  (guessed response)      |                               |
+	TXN string `fesl:"TXN"`
+	MemChecks string `fesl:"memcheck.[]"`
+	Salt      string `fesl:"salt"`
+	Type      string `fesl:"type"`
+	Result 	  string `fesl:"result"`
 
-## TXN = MemCheck, game client/server => FESL server
-This message is always a response to a MemCheck query message by the FESL server.
-
-|Key                       |Example value              |Note                           |
-|--------------------------|---------------------------|-------------------------------|
-|result                    |*empty*                    |                               |
 
 ## TXN = NuLogin, game client/server => FESL server
 This message is sent by clients/servers to authenticate.
@@ -287,14 +282,6 @@ This message is sent to update character stats.
 |u.*i*.s.[]                |                           |                                 |
 |u.[]                      |                           |                                 |
 
-
-## TXN = GetTelemetryToken, game client/server => FESL server
-Returns a unique token for game telemetry.
-This is only used in 2009 client ?
-
-|Key                       |Example value              |Note                           |
-|--------------------------|---------------------------|-------------------------------|
-|                          |                           |                               |
 
 ## TXN = GetTelemetryToken, FESL server => game client/server
 ## only requested in 2009 client and 2015 client

@@ -8,16 +8,13 @@ import (
 
 // NuLoginServer - NuLogin for gameServer.exe
 func (fm *Fesl) NuLoginServer(event network.EvProcess) {
-	ready := event.Client.IsActive
-	if !ready {
+	active := event.Client.IsActive
+	if !active {
 		logrus.Println("C Left")
 		return
 	}
 
-	logrus.Println("===NuLoginServer===")
-
 	if event.Client.HashState.Get("clientType") != "server" {
-		logrus.Println("===Possible Exploit==")
 		return
 	}
 
@@ -30,82 +27,78 @@ func (fm *Fesl) NuLoginServer(event network.EvProcess) {
 		return
 	}
 
-	saveRedis := make(map[string]interface{})
-	saveRedis["uID"] = userID
-	saveRedis["sID"] = id
-	saveRedis["username"] = username
-	saveRedis["apikey"] = event.Process.Msg["encryptedInfo"]
-	saveRedis["keyHash"] = event.Process.Msg["password"]
-	event.Client.HashState.SetM(saveRedis)
+	Redis := make(map[string]interface{})
+	Redis["uID"] = userID
+	Redis["sID"] = id
+	Redis["username"] = username
+	Redis["apikey"] = event.Process.Msg["encryptedInfo"]
+	Redis["keyHash"] = event.Process.Msg["password"]
+	event.Client.HashState.SetM(Redis)
 
 	//Setup new key for our persona	
-	tempKey, err := randomize()
-	lkeyRedis := fm.level.NewObject("lkeys", tempKey)
+	lkey, _ := getlkey()
+	lkeyRedis := fm.level.NewObject("lkeys", lkey)
 	lkeyRedis.Set("id", id)
 	lkeyRedis.Set("userID", userID)
 	lkeyRedis.Set("name", username)
 
-	if !ready {
+	if !active {
 		logrus.Println("AFK")
 		return
 	}
 
-	event.Client.HashState.Set("lkeys", event.Client.HashState.Get("lkeys")+";"+tempKey)
+	event.Client.HashState.Set("lkeys", event.Client.HashState.Get("lkeys")+";"+lkey)
 	event.Client.Answer(&codec.Packet{
 		Content: ansNuLogin{
-			TXN:       acctNuLogin,
+			TXN:       "NuLogin",
 			ProfileID: userID,
 			UserID:    userID,
 			NucleusID: username,
-			Lkey:      tempKey,
+			Lkey:      lkey,
 		},
 		Send:    event.Process.HEX,
 		Message: acct,
 	})
 }
 
+
+
 //NuLoginPersonaServer The Login is based on the Name
 //there's only 1 persona(hero) for the server, so it works like a password
 func (fm *Fesl) NuLoginPersonaServer(event network.EvProcess) {
-	ready := event.Client.IsActive
-	if !ready {
+	active := event.Client.IsActive
+	/////Checks///////
+	if !active {
 		logrus.Println("AFK")
 		return
 	}
 
-	logrus.Println("===LoginPersonaServer===")
-	/////Checks///////
+	logrus.Println("==LoginPersonaServer==")
 
 	if event.Client.HashState.Get("clientType") != "server" {
-		logrus.Println("===Possible Exploit===")
+		logrus.Println("==PossibleExploit==")
 		fm.Goodbye(event)
 		return
 	}
 
-	var id, userID, servername, secretKey, username string
-	err := fm.db.stmtGetServerByName.QueryRow(event.Process.Msg["name"]).Scan(&id, //continue
-		&userID, &servername, &secretKey, &username)
 
-	if event.Client.HashState.Get("clientType") != "server" || err != nil {
-		logrus.Println("===Possible Exploit===")
-		fm.Goodbye(event)
-		return
-	}
+	var id, userID, servername string
+	//err := fm.db.stmtGetServerByName.QueryRow(event.Process.Msg["name"]).Scan(id, userID, servername, secretKey, username)
 
 	// Setup a new key for our persona	
-	tempKey, err := randomize()
-	lkeyRedis := fm.level.NewObject("lkeys", tempKey)
+	lkey, _ := getlkey()
+	lkeyRedis := fm.level.NewObject("lkeys", lkey)
 	lkeyRedis.Set("id", userID)
 	lkeyRedis.Set("userID", userID)
 	lkeyRedis.Set("name", servername)
 
-	event.Client.HashState.Set("lkeys", event.Client.HashState.Get("lkeys")+";"+tempKey)
+	event.Client.HashState.Set("lkeys", event.Client.HashState.Get("lkeys")+";"+lkey)
 	event.Client.Answer(&codec.Packet{
 		Content: ansNuLogin{
-			TXN:       acctNuLoginPersona,
+			TXN:       "NuLoginPersona",
 			ProfileID: id,
-			UserID:    id,
-			Lkey:      tempKey,
+			UserID:    userID,
+			Lkey:      lkey,
 		},
 		Send:    event.Process.HEX,
 		Message: acct,

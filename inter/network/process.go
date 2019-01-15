@@ -6,6 +6,7 @@ import (
 	"errors"
 	"net"
 	"strings"
+
 	"github.com/Synaxis/bfheroesFesl/inter/network/codec"
 
 	"github.com/sirupsen/logrus"
@@ -20,13 +21,64 @@ func (client *Client) readFESL(data []byte) []byte {
 	})
 }
 
+func readFesl(data []byte, fireEvent eventReadFesl) []byte {
+	p := bytes.NewBuffer(data)
+	i := 0
+
+	var ContentRaw []byte
+	for {
+		// Create a copy at this point in case we have to abort later
+		// And send back the Packet to get the rest
+		curData := p
+
+		var HEX uint32
+		var length uint32
+
+		ContentTypeRaw := make([]byte, 4)
+		_, err := p.Read(ContentTypeRaw)
+		if err != nil {
+			return nil
+		}
+
+		ContentType := string(ContentTypeRaw)
+
+		binary.Read(p, binary.BigEndian, &HEX)
+
+		if p.Len() < 4 {
+			return nil
+		}
+
+		binary.Read(p, binary.BigEndian, &length)
+
+		if (length - 12) > uint32(len(p.Bytes())) {
+			logrus.Println("Packet not fully read")
+			return curData.Bytes()
+		}
+
+		ContentRaw = make([]byte, (length - 12))
+		p.Read(ContentRaw)
+
+		Content := codec.DecodeFESL(ContentRaw) //hex to asci
+
+		out := &ProcessFESL{
+			Query: ContentType,
+			HEX:   HEX, //ContentID like 0xc000000d
+			Msg:   Content,
+		}
+		fireEvent(out, ContentType)
+
+		i++
+	}
+
+	return nil
+}
+
 func (client *Client) readFESLTLS(data []byte) []byte {
 	return readFesl(data, func(cmd *ProcessFESL, ContentType string) {
 		client.eventChan <- ClientEvent{Name: "command." + cmd.Msg["TXN"], Data: cmd}
 		client.eventChan <- ClientEvent{Name: "command", Data: cmd}
 	})
 }
-
 
 //new
 // func (client *Client) readFESL(data []byte) {
@@ -45,7 +97,6 @@ func (client *Client) readFESLTLS(data []byte) []byte {
 // 		}
 // 	}
 // }
-
 
 // func (socket *SocketUDP) readFESL(data []byte, addr *net.UDPAddr) {
 // 	p := bytes.NewBuffer(data)
@@ -111,7 +162,6 @@ type RawPacket struct {
 	Payload []byte
 }
 
-
 func (socket *SocketUDP) readFESL(data []byte, addr *net.UDPAddr) {
 	p := bytes.NewBuffer(data)
 	var payloadID uint32
@@ -136,62 +186,6 @@ func (socket *SocketUDP) readFESL(data []byte, addr *net.UDPAddr) {
 	}
 }
 
-
-
-func readFesl(data []byte, fireEvent eventReadFesl) []byte {
-	p := bytes.NewBuffer(data)
-	i := 0
-	
-	var ContentRaw []byte
-	for {
-		// Create a copy at this point in case we have to abort later
-		// And send back the Packet to get the rest
-		curData := p
-
-		var HEX uint32
-		var length uint32
-
-		ContentTypeRaw := make([]byte, 4)
-		_, err := p.Read(ContentTypeRaw)
-		if err != nil {
-			return nil
-		}
-
-		ContentType := string(ContentTypeRaw)
-
-		binary.Read(p, binary.BigEndian, &HEX)
-
-
-		if p.Len() < 4 {
-			return nil
-		}
-
-
-		binary.Read(p, binary.BigEndian, &length)
-
-		if (length - 12) > uint32(len(p.Bytes())) {
-			logrus.Println("Packet not fully read")
-			return curData.Bytes()
-		}
-
-		ContentRaw = make([]byte, (length - 12))
-		p.Read(ContentRaw)
-
-		Content := codec.DecodeFESL(ContentRaw) //hex to asci
-
-		out := &ProcessFESL{
-			Query: ContentType,
-			HEX:   HEX, //ContentID like 0xc000000d
-			Msg:   Content,
-		}
-		fireEvent(out, ContentType)
-
-		i++
-	}
-
-	return nil
-}
-
 type ProcessFESL struct {
 	Msg   map[string]string
 	Query string
@@ -201,9 +195,7 @@ type ProcessFESL struct {
 // processCommand turns gamespy's command string to the
 // command struct
 func processCommand(msg string) (*ProcessFESL, error) {
-	
-	
-	
+
 	outCommand := new(ProcessFESL) // Command not a CommandFESL
 	outCommand.Msg = make(map[string]string)
 	data := strings.Split(msg, `\`)
