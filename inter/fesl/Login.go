@@ -19,7 +19,7 @@ type ansNuLogin struct {
 
 //return  new uuid
 func getlkey() (rand string, retErr error) {
-	newRandom := uuid.NewV4()
+	newRandom, _ := uuid.NewV4()
 	newlkey := newRandom.String()
 
 	return newlkey, nil

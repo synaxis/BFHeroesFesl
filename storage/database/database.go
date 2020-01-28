@@ -8,10 +8,9 @@ import (
 	"github.com/Synaxis/bfheroesFesl/config"
 
 	// Needed since we are using this as driver for MySQL database
-	"github.com/Synaxis/logrus"
-	_ "github.com/Synaxis/mysql"
+	_ "github.com/go-sql-driver/mysql"
+	"github.com/sirupsen/logrus"
 )
-
 // New tries to establish connection with database
 func New(cfg config.MySQL) (*sql.DB, error) {
 	return newMySQL(mysqlDSN(cfg))

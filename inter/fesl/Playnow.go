@@ -42,64 +42,54 @@ func (fm *Fesl) Start(event network.EvProcess) {
 
 }
 
-type Status struct {
-	TXN        string                 `fesl:"TXN"`
-	ID         string       		  `fesl:"id.id"`//exclusive strings from the game
+type ansStatus struct {
+	Taxon        string                 `fesl:"TXN"`
+	ID        string    `fesl:"id.id"`
+	State string                 `fesl:"sessionState"`
+	Properties   map[string]interface{} `fesl:"props"`
 	Partition 	string				  `fesl:"partition"`
-	State      string                 `fesl:"sessionState"`
-	Properties map[string]interface{} `fesl:"props"`
+}
+
+type stPartition struct {
+	ID        string    `fesl:"id.id"`
+	Partition string `fesl:"partition"`
 }
 
 type stGame struct {
 	LobbyID int    `fesl:"lid"`
 	Fit     int    `fesl:"fit"`
-	GID     string `fesl:"gid"` //gameID to join
+	GID  string `fesl:"gid"` //gameID to join
 }
-
 // Status comes after Start. tells info about desired server
 func (fm *Fesl) Status(event network.EvProcess) {
 	logrus.Println("--Status--")			
 
 
-	var gid string	
-	var err error
-	//search our DB for a gameID (gid) to join fot that indivudal player(uID)
-	err = fm.db.stmtGetBookmark.QueryRow(event.Client.HashState.Get("uID")).Scan(&gid)
-	if err != nil {	
- 		logrus.Println("no game found for player")
-	}	
-
-
-	// continuos search
-	for search := range mm.Games {
-	gid := search
-	gamesArray := []stGame{
-		{
-			GID:     gid,
-			Fit:     1001,
-			LobbyID: 1,
-		},
-	}		
-
-	//todo if joined = true ( do nothing)
-	//if joined = false ( send canceled STATE)
+	for search := range mm.Games {  //is this crashing ?
+		gid := search
+		gamesArray := []stGame{
+			{
+				GID:     gid,
+				Fit:     1001,
+				LobbyID: 1,
+			},
+		}
 
 	event.Client.Answer(&codec.Packet{
-		Content: Status{
-			TXN:    "Status",
-			State:  "COMPLETE",
-			ID:    "1",
+		Content: ansStatus{
+			Taxon:        "Status",
+			ID:           "1",
+			State: "COMPLETE",
 			Partition: "eagames/bfwest-dedicated",
 			Properties: map[string]interface{}{
 				"props.{}": "3", //the n of properties
 				"resultType": "JOIN",
 				"sessionType": "findServer",
 				"games":      gamesArray},
-		},
-		Send:    event.Process.HEX,
-		Message: pnow,
+		},		
+		Send:    0x80000000,
+		Message:    pnow,
 	})
-	
+
 	}
 }
-
