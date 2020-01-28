@@ -24,6 +24,14 @@ type ansUBRA struct {
 func (tM *Theater) UBRA(event network.EvProcess) {
 	logrus.Println("===UBRA==")
 
+	
+	gdata := tM.level.NewObject("gdata", event.Process.Msg["GID"])
+
+	if event.Process.Msg["START"] == "1" {
+		gdata.Set("AP", "0") // AP = ActivePlayer (individual)
+		// If Player Entered -> Reset AP
+	}
+
 	event.Client.Answer(&codec.Packet{
 		Message: "UBRA",
 		Content: ansUBRA{
@@ -32,11 +40,5 @@ func (tM *Theater) UBRA(event network.EvProcess) {
 			START: 1,
 		}},
 	)
-	gdata := tM.level.NewObject("gdata", event.Process.Msg["GID"])
-
-	if event.Process.Msg["START"] == "1" {
-		gdata.Set("AP", "0") // AP = ActivePlayer (individual)
-		// If Player Entered -> Reset AP
-	}
 
 }

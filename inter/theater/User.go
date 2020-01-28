@@ -49,7 +49,7 @@ func (tm *Theater) USER(event network.EvProcess) {
 	event.Client.Answer(&codec.Packet{
 		Message: "USER",
 		Content: answerUSER{
-			ClientID: event.Process.Msg["CID"],
+			ClientID: lkeyRedis.Get("id"),
 			TID:      event.Process.Msg["TID"],
 			Name:     lkeyRedis.Get("name"),
 		},

@@ -120,8 +120,8 @@ func (tm *Theater) GDAT(event network.EvProcess) {
 		Content: ansGDAT{
 			TID:                  event.Process.Msg["TID"],
 			Ap:                   gameServer.Get("AP"),
-			GameID:               gameID, //(GID)
-			LobbyID:              gameServer.Get("LID"),
+			GameID:               gameServer.Get("GID"),
+			LobbyID:             "1",
 			ArmyDistribution:     gameServer.Get("B-U-army_distribution"),
 			AvailableVipsNation:  gameServer.Get("B-U-avail_vips_national"),
 			AvailableVipsRoyal:   gameServer.Get("B-U-avail_vips_royal"),

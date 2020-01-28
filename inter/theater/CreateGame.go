@@ -55,7 +55,6 @@ type ansCGAM struct {
 	UGID       string `fesl:"UGID"`
 	Secret     string `fesl:"SECRET"`
 	JOIN       string `fesl:"JOIN"`
-	JoinMode   string `fesl:"JoindMode"`
 	J          string `fesl:"J"`
 	GameID     string `fesl:"GID"`
 	isRanked   bool   `fesl:"B-U-UNRANKED"`
@@ -140,12 +139,11 @@ func (tm *Theater) CGAM(event network.EvProcess) {
 			LobbyID:    1, //should not be hardcoded
 			UGID:       answer["UGID"],
 			MaxPlayers: answer["MAX-PLAYERS"],
-			EKEY:       "TEST1234",
+			EKEY:       `O65zZ2D2A58mNrZw1hmuJw%3d%3d`,
 			Secret:     "MargeSimpson",
-			JOIN:       answer["JOIN"],
 			isRanked:   false,
+			JOIN:       answer["JOIN"],
 			J:          answer["JOIN"],
-			JoinMode:   "1",
 			GameID:     gameID,
 		},
 	})
